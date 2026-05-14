@@ -1,0 +1,114 @@
+{% extends 'layouts/public_base.html' %}
+
+{% block title %}
+Simulación de independencia | FiCo
+{% endblock %}
+
+{% block content %}
+
+<section class="py-24">
+  <div class="section-container">
+
+    <div class="max-w-3xl mb-14">
+      <div class="section-label">
+        Simulación financiera
+      </div>
+
+      <h1 class="text-5xl lg:text-6xl font-bold leading-tight mb-6">
+        Estimá tu camino hacia la independencia financiera.
+      </h1>
+
+      <p class="muted-text text-lg max-w-2xl">
+        Probá distintos escenarios según tus gastos, ahorro mensual, capital inicial y edad objetivo.
+        Esta simulación es orientativa y busca ayudarte a visualizar metas de largo plazo.
+      </p>
+    </div>
+
+    <div class="grid lg:grid-cols-[1.05fr_0.95fr] gap-8 items-start">
+
+      {% include 'components/shared/form_independencia.html' %}
+
+      <div class="space-y-6">
+
+        <div class="card card-padding">
+          <p class="text-sm text-[var(--color-text-muted)] mb-2">
+            Capital objetivo estimado
+          </p>
+
+          <h2 class="text-4xl font-bold text-[var(--color-brand-primary)] mb-3">
+            $135.000.000
+          </h2>
+
+          <p class="muted-text text-sm">
+            Es el capital aproximado necesario para cubrir tus gastos mediante rendimientos.
+          </p>
+        </div>
+
+        <div class="grid sm:grid-cols-2 gap-4">
+
+          <div class="card p-6">
+            <p class="text-sm text-[var(--color-text-muted)] mb-2">
+              Tiempo disponible
+            </p>
+
+            <h3 class="text-2xl font-bold">
+              23 años
+            </h3>
+          </div>
+
+          <div class="card p-6">
+            <p class="text-sm text-[var(--color-text-muted)] mb-2">
+              Capital proyectado
+            </p>
+
+            <h3 class="text-2xl font-bold">
+              $67.800.000
+            </h3>
+          </div>
+
+        </div>
+
+        <div class="card card-padding">
+          <h3 class="text-xl font-semibold mb-4">
+            Resultado de la simulación
+          </h3>
+
+          <p class="muted-text mb-6">
+            Con los valores actuales, todavía existiría una diferencia entre tu capital proyectado
+            y el capital objetivo. Podrías ajustar tu ahorro mensual, extender el plazo o modificar
+            el rendimiento estimado.
+          </p>
+
+          <div class="rounded-2xl bg-zinc-950/50 border border-zinc-800 p-5">
+            <p class="text-sm text-[var(--color-text-muted)] mb-1">
+              Aporte mensual sugerido
+            </p>
+
+            <p class="text-3xl font-bold">
+              $142.000
+            </p>
+          </div>
+        </div>
+
+        <div class="card card-padding border-[var(--color-brand-primary)]/40">
+          <h3 class="text-xl font-semibold mb-3">
+            Guardá esta simulación
+          </h3>
+
+          <p class="muted-text mb-6">
+            Creá una cuenta para guardar tus escenarios, compararlos y hacer seguimiento de tu progreso.
+          </p>
+
+          <a href="{{ url_for('register') }}" class="btn-primary w-full">
+            Crear cuenta gratis
+          </a>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+{% endblock %}

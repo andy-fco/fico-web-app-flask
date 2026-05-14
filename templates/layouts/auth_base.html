@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>
+
+        {% block title %}
+        FiCo
+        {% endblock %}
+
+    </title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/output.css') }}">
+
+</head>
+
+<body class="relative min-h-screen bg-[var(--color-bg-primary)] text-[var(--color-text-primary)] overflow-x-hidden">
+
+    <!--background glow-->
+    <div class="fixed inset-0 z-0 overflow-hidden pointer-events-none">
+
+        <div class="absolute top-[-180px] left-[-120px] w-[650px] h-[650px] bg-emerald-500/20 blur-[120px] rounded-full"></div>
+
+        <div class="absolute bottom-[-180px] right-[-120px] w-[650px] h-[650px] bg-emerald-400/20 blur-[120px] rounded-full"></div>
+
+    </div>
+
+    <header class="relative z-10 w-full px-6 py-6">
+
+        <div class="max-w-7xl mx-auto flex items-center justify-between">
+
+            <a href="/"
+               class="text-3xl font-bold tracking-tight text-[var(--color-brand-primary)] hover:text-[var(--color-brand-hover)] transition">
+
+                FiCo
+
+            </a>
+
+            <a href="/"
+               class="text-sm text-[var(--color-text-secondary)] hover:text-[var(--color-brand-primary)] transition">
+
+                Volver al inicio
+
+            </a>
+
+        </div>
+
+    </header>
+
+    
+    <main class="relative z-10 flex items-center justify-center px-6 py-12">
+
+        {% block content %}
+        {% endblock %}
+
+    </main>
+
+</body>
+
+</html>

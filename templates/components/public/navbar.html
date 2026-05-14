@@ -1,0 +1,41 @@
+<nav class="bg-[var(--color-bg-secondary)] border-b border-[var(--color-border)] backdrop-blur-sm">
+
+    <div class="section-container flex justify-between items-center py-4">
+
+        
+        <a href="/"
+           class="text-2xl font-bold tracking-tight text-[var(--color-brand-primary)] hover:text-[var(--color-brand-hover)] transition">
+
+            FiCo
+
+        </a>
+
+        
+        <div class="flex items-center gap-8">
+
+            <a href="{{url_for('simulador')}}"
+               class="nav-link">
+
+                Simulador
+
+            </a>
+
+            <a href="{{ url_for('login') }}"
+               class="nav-link">
+
+                Ingresar
+
+            </a>
+
+            <a href="{{ url_for('register') }}"
+               class="btn-primary px-5 py-2.5 rounded-xl">
+
+                Registrarme
+
+            </a>
+
+        </div>
+
+    </div>
+
+</nav>

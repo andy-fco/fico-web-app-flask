@@ -1,0 +1,209 @@
+<form class="card card-padding space-y-8">
+
+  <div>
+    <h2 class="text-2xl font-bold mb-2">
+      Datos de simulación
+    </h2>
+
+    <p class="muted-text text-sm">
+      Completá tus datos para estimar cuánto capital necesitás para alcanzar independencia financiera.
+    </p>
+  </div>
+
+  <div class="space-y-6">
+
+    <div>
+      <label class="label">
+        Gasto mensual estimado
+      </label>
+
+      <input type="number"
+             name="monthly_expenses"
+             placeholder="Ej: 450000"
+             class="input">
+    </div>
+
+    <div>
+      <label class="label">
+        Capital inicial disponible
+      </label>
+
+      <input type="number"
+             name="initial_capital"
+             placeholder="Ej: 1000000"
+             class="input">
+    </div>
+
+    <div>
+      <div class="flex items-center justify-between mb-2">
+        <label class="label mb-0">
+          Ahorro / inversión mensual
+        </label>
+
+        <span id="monthly-investment-output"
+              class="text-sm text-[var(--color-brand-primary)] font-semibold">
+          $75.000
+        </span>
+      </div>
+
+      <input type="range"
+             name="monthly_investment"
+             min="0"
+             max="500000"
+             step="5000"
+             value="75000"
+             data-target="monthly-investment-output"
+             data-format="money"
+             class="w-full accent-emerald-400 cursor-pointer">
+
+      <div class="flex justify-between text-xs text-[var(--color-text-muted)] mt-2">
+        <span>$0</span>
+        <span>$500.000</span>
+      </div>
+    </div>
+
+    <div>
+      <div class="flex items-center justify-between mb-2">
+        <label class="label mb-0">
+          Rendimiento anual estimado
+        </label>
+
+        <span id="annual-return-output"
+              class="text-sm text-[var(--color-brand-primary)] font-semibold">
+          6%
+        </span>
+      </div>
+
+      <input type="range"
+             name="annual_return"
+             min="1"
+             max="15"
+             step="0.5"
+             value="6"
+             data-target="annual-return-output"
+             data-format="percent"
+             class="w-full accent-emerald-400 cursor-pointer">
+
+      <div class="flex justify-between text-xs text-[var(--color-text-muted)] mt-2">
+        <span>1%</span>
+        <span>15%</span>
+      </div>
+    </div>
+
+    <div class="grid sm:grid-cols-2 gap-4">
+
+      <div>
+        <div class="flex items-center justify-between mb-2">
+          <label class="label mb-0">
+            Edad actual
+          </label>
+
+          <span id="current-age-output"
+                class="text-sm text-[var(--color-brand-primary)] font-semibold">
+            22
+          </span>
+        </div>
+
+        <input type="range"
+               name="current_age"
+               min="16"
+               max="70"
+               value="22"
+               data-target="current-age-output"
+               data-format="number"
+               class="w-full accent-emerald-400 cursor-pointer">
+      </div>
+
+      <div>
+        <div class="flex items-center justify-between mb-2">
+          <label class="label mb-0">
+            Edad objetivo
+          </label>
+
+          <span id="target-age-output"
+                class="text-sm text-[var(--color-brand-primary)] font-semibold">
+            45
+          </span>
+        </div>
+
+        <input type="range"
+               name="target_age"
+               min="18"
+               max="80"
+               value="45"
+               data-target="target-age-output"
+               data-format="number"
+               class="w-full accent-emerald-400 cursor-pointer">
+      </div>
+
+    </div>
+
+    <details class="rounded-2xl border border-zinc-800 bg-zinc-950/40 p-4">
+      <summary class="cursor-pointer text-sm font-medium text-zinc-300">
+        Configuración avanzada
+      </summary>
+
+      <div class="mt-4">
+        <div class="flex items-center justify-between mb-2">
+          <label class="label mb-0">
+            Tasa de retiro segura
+          </label>
+
+          <span id="safe-withdrawal-rate-output"
+                class="text-sm text-[var(--color-brand-primary)] font-semibold">
+            4%
+          </span>
+        </div>
+
+        <input type="range"
+               name="safe_withdrawal_rate"
+               min="2"
+               max="6"
+               step="0.25"
+               value="4"
+               data-target="safe-withdrawal-rate-output"
+               data-format="percent"
+               class="w-full accent-emerald-400 cursor-pointer">
+
+        <p class="text-xs text-[var(--color-text-muted)] mt-3 leading-relaxed">
+          Representa el porcentaje anual que estimás retirar de tu capital para cubrir gastos.
+        </p>
+      </div>
+    </details>
+
+  </div>
+
+  <button type="submit" class="btn-primary w-full">
+    Calcular simulación
+  </button>
+
+</form>
+
+<script>
+  const simulationSliders = document.querySelectorAll('input[type="range"][data-target]');
+
+  simulationSliders.forEach((slider) => {
+    const output = document.getElementById(slider.dataset.target);
+    const format = slider.dataset.format;
+
+    const updateOutput = () => {
+      const value = Number(slider.value);
+
+      if (format === 'money') {
+        output.textContent = `$${value.toLocaleString('es-AR')}`;
+      }
+
+      if (format === 'percent') {
+        output.textContent = `${value.toLocaleString('es-AR')}%`;
+      }
+
+      if (format === 'number') {
+        output.textContent = value;
+      }
+    };
+
+    updateOutput();
+
+    slider.addEventListener('input', updateOutput);
+  });
+</script>

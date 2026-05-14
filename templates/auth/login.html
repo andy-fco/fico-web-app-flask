@@ -1,0 +1,70 @@
+{% extends 'layouts/auth_base.html' %}
+
+{% block title %}
+Ingresar | FiCo
+{% endblock %}
+
+{% block content %}
+
+<div class="w-full max-w-md">
+    <div class="auth-card">
+
+        <div class="mb-8">
+            <h1 class="text-4xl font-bold mb-3">
+                Bienvenido nuevamente
+            </h1>
+
+            <p class="muted-text">
+                Ingresá a tu cuenta para continuar gestionando tus finanzas.
+            </p>
+        </div>
+
+        <form class="space-y-6">
+
+            <div>
+                <label class="label">
+                    Correo electrónico
+                </label>
+
+                <input type="email"
+                       placeholder="ejemplo@email.com"
+                       class="input">
+            </div>
+
+            <div>
+                <div class="flex items-center justify-between mb-2">
+                    <label class="label mb-0">
+                        Contraseña
+                    </label>
+
+                    <a href="#" class="auth-link text-sm">
+                        Olvidé mi contraseña
+                    </a>
+                </div>
+
+                <input type="password"
+                       placeholder="••••••••"
+                       class="input">
+            </div>
+
+            <button type="submit"
+                    class="btn-primary w-full shadow-lg shadow-emerald-500/10">
+                Ingresar
+            </button>
+
+        </form>
+
+        <div class="mt-8 pt-6 border-t border-[var(--color-border)] text-center">
+            <p class="text-[var(--color-text-secondary)]">
+                ¿No tenés una cuenta?
+
+                <a href="{{ url_for('register') }}" class="auth-link">
+                    Registrate
+                </a>
+            </p>
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}

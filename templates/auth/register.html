@@ -1,0 +1,84 @@
+{% extends 'layouts/auth_base.html' %}
+
+{% block title %}
+Registro | FiCo
+{% endblock %}
+
+{% block content %}
+
+<div class="w-full max-w-md">
+    <div class="auth-card">
+
+        <div class="mb-8">
+            <h1 class="text-4xl font-bold mb-3">
+                Crear cuenta
+            </h1>
+
+            <p class="muted-text">
+                Empezá a organizar tus finanzas y proyectar tu futuro económico.
+            </p>
+        </div>
+
+        <form class="space-y-6">
+
+            <div>
+                <label class="label">
+                    Nombre
+                </label>
+
+                <input type="text"
+                       placeholder="Tu nombre"
+                       class="input">
+            </div>
+
+            <div>
+                <label class="label">
+                    Correo electrónico
+                </label>
+
+                <input type="email"
+                       placeholder="ejemplo@email.com"
+                       class="input">
+            </div>
+
+            <div>
+                <label class="label">
+                    Contraseña
+                </label>
+
+                <input type="password"
+                       placeholder="••••••••"
+                       class="input">
+            </div>
+
+            <div>
+                <label class="label">
+                    Confirmar contraseña
+                </label>
+
+                <input type="password"
+                       placeholder="••••••••"
+                       class="input">
+            </div>
+
+            <button type="submit"
+                    class="btn-primary w-full shadow-lg shadow-emerald-500/10">
+                Crear cuenta
+            </button>
+
+        </form>
+
+        <div class="mt-8 pt-6 border-t border-[var(--color-border)] text-center">
+            <p class="text-[var(--color-text-secondary)]">
+                ¿Ya tenés una cuenta?
+
+                <a href="{{ url_for('login') }}" class="auth-link">
+                    Ingresá
+                </a>
+            </p>
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}
