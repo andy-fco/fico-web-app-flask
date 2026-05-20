@@ -3,3 +3,211 @@
 {% block title %}
 FiCo | Independencia
 {% endblock %}
+
+
+{% block content %}
+<section class="space-y-8">
+
+  <header>
+    <h1 class="mt-2 text-3xl font-semibold">Independencia financiera</h1>
+    <p class="mt-2 max-w-2xl muted-text">
+      Estimá cuánto capital necesitás para cubrir tus gastos mediante rendimientos y cuánto tiempo podrías tardar en alcanzarlo.
+    </p>
+  </header>
+
+  <div class="grid gap-6 xl:grid-cols-[0.9fr_1.1fr]">
+
+    {% include "components/shared/form_independencia.html" %}
+
+    <section class="space-y-6">
+
+      <article class="card card-padding">
+        <p class="text-sm text-[var(--color-brand-primary)]">Resultado estimado</p>
+
+        <h2 class="mt-3 text-3xl font-semibold">
+          $135.000.000
+        </h2>
+
+        <p class="mt-2 muted-text">
+          Capital objetivo necesario para cubrir tus gastos mensuales estimados.
+        </p>
+      </article>
+
+      <article class="card card-padding">
+        <h2 class="text-xl font-semibold">Resumen de la simulación</h2>
+
+        <div class="mt-6 space-y-4">
+
+          <div class="flex justify-between gap-4 text-sm">
+            <span class="muted-text">Gasto mensual</span>
+            <span class="font-medium">$450.000</span>
+          </div>
+
+          <div class="flex justify-between gap-4 text-sm">
+            <span class="muted-text">Capital inicial</span>
+            <span class="font-medium">$1.000.000</span>
+          </div>
+
+          <div class="flex justify-between gap-4 text-sm">
+            <span class="muted-text">Inversión mensual</span>
+            <span class="font-medium">$75.000</span>
+          </div>
+
+          <div class="flex justify-between gap-4 text-sm">
+            <span class="muted-text">Rendimiento anual estimado</span>
+            <span class="font-medium">6%</span>
+          </div>
+
+          <div class="flex justify-between gap-4 text-sm">
+            <span class="muted-text">Tasa de retiro segura</span>
+            <span class="font-medium">4%</span>
+          </div>
+
+        </div>
+      </article>
+
+      <article class="card card-padding">
+        <h2 class="text-xl font-semibold">Proyección</h2>
+
+        <div class="mt-6">
+          <div class="mb-2 flex justify-between text-sm">
+            <span class="muted-text">Camino estimado</span>
+            <span class="text-[var(--color-brand-primary)]">18%</span>
+          </div>
+
+          <div class="h-3 rounded-full bg-[var(--color-bg-tertiary)]">
+            <div class="h-3 w-[18%] rounded-full bg-[var(--color-brand-primary)]"></div>
+          </div>
+        </div>
+
+        <p class="mt-4 muted-text">
+          Con estos valores, todavía estás lejos del capital objetivo. Aumentar la inversión mensual o reducir gastos acelera significativamente el resultado.
+        </p>
+      </article>
+
+      <article class="card card-padding border-emerald-500/20 bg-emerald-500/10">
+        <h2 class="text-xl font-semibold">Lectura rápida</h2>
+
+        <p class="mt-3 muted-text">
+          Esta simulación no representa una inversión real, sino una estimación basada en los datos ingresados por el usuario.
+        </p>
+
+        <button class="btn-secondary mt-6 w-full">
+          Guardar simulación
+        </button>
+      </article>
+
+    </section>
+
+  </div>
+
+</section>
+
+<section class="space-y-5">
+
+  <div class="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
+    <div>
+      <h2 class="text-2xl font-semibold">Simulaciones guardadas</h2>
+      <p class="mt-1 muted-text">
+        Consultá escenarios anteriores o retomá una simulación con los valores ya cargados.
+      </p>
+    </div>
+
+    <button class="btn-secondary">
+      Ver historial completo
+    </button>
+  </div>
+
+  <div class="grid gap-5 lg:grid-cols-3">
+
+    <article class="card card-padding card-hover">
+      <div class="flex items-start justify-between gap-4">
+        <div>
+          <p class="text-sm text-[var(--color-brand-primary)]">Guardada</p>
+          <h3 class="mt-2 text-xl font-semibold">Escenario conservador</h3>
+        </div>
+
+        <span class="badge">6% anual</span>
+      </div>
+
+      <div class="mt-6 space-y-4">
+        <div class="flex justify-between gap-4 text-sm">
+          <span class="muted-text">Capital objetivo</span>
+          <span class="font-medium">$135.000.000</span>
+        </div>
+
+        <div class="flex justify-between gap-4 text-sm">
+          <span class="muted-text">Gasto mensual</span>
+          <span class="font-medium">$450.000</span>
+        </div>
+
+        <div class="flex justify-between gap-4 text-sm">
+          <span class="muted-text">Inversión mensual</span>
+          <span class="font-medium">$75.000</span>
+        </div>
+
+        <div class="flex justify-between gap-4 text-sm">
+          <span class="muted-text">Edad objetivo</span>
+          <span class="font-medium">45 años</span>
+        </div>
+      </div>
+
+      <button class="auth-link mt-6 text-sm">
+        Abrir simulación
+      </button>
+    </article>
+
+    <article class="card card-padding card-hover">
+      <div class="flex items-start justify-between gap-4">
+        <div>
+          <p class="text-sm text-[var(--color-brand-primary)]">Guardada</p>
+          <h3 class="mt-2 text-xl font-semibold">Mayor inversión mensual</h3>
+        </div>
+
+        <span class="badge">8% anual</span>
+      </div>
+
+      <div class="mt-6 space-y-4">
+        <div class="flex justify-between gap-4 text-sm">
+          <span class="muted-text">Capital objetivo</span>
+          <span class="font-medium">$120.000.000</span>
+        </div>
+
+        <div class="flex justify-between gap-4 text-sm">
+          <span class="muted-text">Gasto mensual</span>
+          <span class="font-medium">$400.000</span>
+        </div>
+
+        <div class="flex justify-between gap-4 text-sm">
+          <span class="muted-text">Inversión mensual</span>
+          <span class="font-medium">$150.000</span>
+        </div>
+
+        <div class="flex justify-between gap-4 text-sm">
+          <span class="muted-text">Edad objetivo</span>
+          <span class="font-medium">40 años</span>
+        </div>
+      </div>
+
+      <button class="auth-link mt-6 text-sm">
+        Abrir simulación
+      </button>
+    </article>
+
+    <article class="card card-padding border-dashed border-[var(--color-border)]">
+      <div class="flex h-full min-h-72 flex-col items-center justify-center text-center">
+        <h3 class="text-xl font-semibold">Guardar nuevo escenario</h3>
+        <p class="mt-3 max-w-sm muted-text">
+          Cuando calcules una simulación, vas a poder guardarla para compararla o modificarla más adelante.
+        </p>
+
+        <button class="btn-primary mt-6">
+          Guardar simulación actual
+        </button>
+      </div>
+    </article>
+
+  </div>
+
+</section>
+{% endblock %}

@@ -3,3 +3,145 @@
 {% block title %}
 FiCo | Home
 {% endblock %}
+
+
+{% block content %}
+<section class="space-y-8">
+
+  <header>
+    
+    <h1 class="mt-2 text-3xl font-semibold">Hola, Andrés</h1>
+    <p class="mt-2 max-w-2xl muted-text">
+      Tu resumen general.
+    </p>
+  </header>
+
+  <div class="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
+
+    <article class="card card-padding">
+      <p class="text-sm muted-text">Saldo estimado</p>
+      <h2 class="mt-3 text-2xl font-semibold">$1.250.000</h2>
+      <p class="mt-2 text-sm text-emerald-400">+8.4% este mes</p>
+    </article>
+
+    <article class="card card-padding">
+      <p class="text-sm muted-text">Ingresos</p>
+      <h2 class="mt-3 text-2xl font-semibold">$820.000</h2>
+      <p class="mt-2 text-sm text-[var(--color-text-muted)]">Últimos 30 días</p>
+    </article>
+
+    <article class="card card-padding">
+      <p class="text-sm muted-text">Gastos</p>
+      <h2 class="mt-3 text-2xl font-semibold">$470.000</h2>
+      <p class="mt-2 text-sm text-[var(--color-text-muted)]">Últimos 30 días</p>
+    </article>
+
+    <article class="card card-padding">
+      <p class="text-sm muted-text">Ahorro mensual</p>
+      <h2 class="mt-3 text-2xl font-semibold">$350.000</h2>
+      <p class="mt-2 text-sm text-emerald-400">42% de tus ingresos</p>
+    </article>
+
+  </div>
+
+  <div class="grid gap-6 xl:grid-cols-[1.4fr_0.8fr]">
+
+    <section class="card card-padding">
+      <div class="flex items-center justify-between gap-4">
+        <div>
+          <h2 class="text-xl font-semibold">Actividad reciente</h2>
+          <p class="mt-1 text-sm muted-text">Tus últimos movimientos cargados.</p>
+        </div>
+
+        <a href="{{ url_for('movimientos') }}" class="auth-link text-sm">
+          Ver todos
+        </a>
+      </div>
+
+      <div class="mt-6 divide-y divide-[var(--color-border)]">
+
+        <div class="flex items-center justify-between py-4">
+          <div>
+            <p class="font-medium">Supermercado</p>
+            <p class="text-sm text-[var(--color-text-muted)]">Gasto · Hoy</p>
+          </div>
+          <p class="font-medium text-red-400">- $42.500</p>
+        </div>
+
+        <div class="flex items-center justify-between py-4">
+          <div>
+            <p class="font-medium">Sueldo</p>
+            <p class="text-sm text-[var(--color-text-muted)]">Ingreso · Ayer</p>
+          </div>
+          <p class="font-medium text-emerald-400">+ $820.000</p>
+        </div>
+
+        <div class="flex items-center justify-between py-4">
+          <div>
+            <p class="font-medium">Transporte</p>
+            <p class="text-sm text-[var(--color-text-muted)]">Gasto · 18 mayo</p>
+          </div>
+          <p class="font-medium text-red-400">- $18.000</p>
+        </div>
+
+      </div>
+    </section>
+
+    <aside class="card card-padding border-emerald-500/20 bg-emerald-500/10">
+      <p class="text-sm font-medium text-[var(--color-brand-primary)]">
+        Estado financiero
+      </p>
+
+      <h2 class="mt-3 text-2xl font-semibold">
+        Vas bien encaminado
+      </h2>
+
+      <p class="mt-3 text-sm leading-6 text-zinc-300">
+        Tu nivel de ahorro es saludable. Si mantenés este ritmo, podrías acelerar tus objetivos de independencia financiera.
+      </p>
+
+      <div class="mt-6">
+        <div class="mb-2 flex justify-between text-sm">
+          <span class="muted-text">Progreso mensual</span>
+          <span class="text-[var(--color-brand-primary)]">68%</span>
+        </div>
+
+        <div class="h-3 overflow-hidden rounded-full bg-[var(--color-bg-tertiary)]">
+          <div class="h-full w-[68%] rounded-full bg-[var(--color-brand-primary)]"></div>
+        </div>
+      </div>
+
+      <a href="{{ url_for('independencia') }}" class="btn-primary mt-6 w-full">
+        Simular independencia
+      </a>
+    </aside>
+
+  </div>
+
+  <section class="grid gap-5 md:grid-cols-3">
+
+    <a href="{{ url_for('movimientos') }}" class="card card-padding card-hover">
+      <h3 class="font-semibold">Registrar movimiento</h3>
+      <p class="mt-2 text-sm muted-text">
+        Cargá ingresos o gastos nuevos.
+      </p>
+    </a>
+
+    <a href="{{ url_for('proyecciones') }}" class="card card-padding card-hover">
+      <h3 class="font-semibold">Ver proyecciones</h3>
+      <p class="mt-2 text-sm muted-text">
+        Estimá tu evolución financiera.
+      </p>
+    </a>
+
+    <a href="{{ url_for('reportes') }}" class="card card-padding card-hover">
+      <h3 class="font-semibold">Analizar reportes</h3>
+      <p class="mt-2 text-sm muted-text">
+        Revisá patrones y categorías.
+      </p>
+    </a>
+
+  </section>
+
+</section>
+{% endblock %}

@@ -33,6 +33,10 @@ def dashboard():
 def movimientos():
     return render_template('dashboard/movimientos.html')
 
+@app.route('/dashboard/categorias')
+def categorias():
+    return render_template('dashboard/categorias.html')
+
 @app.route('/dashboard/proyecciones')
 def proyecciones():
     return render_template('dashboard/proyecciones.html')
