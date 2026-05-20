@@ -1,0 +1,29 @@
+<header class="h-16 border-b border-[var(--color-border)] bg-[var(--color-bg-primary)] flex items-center justify-between px-6">
+
+    <a href="{{ url_for('dashboard') }}" class="flex items-center gap-3">
+        <div class="w-9 h-9 rounded-2xl bg-[var(--color-brand-primary)] flex items-center justify-center text-black font-bold">
+            F
+        </div>
+
+        <span class="font-semibold tracking-tight">
+            FiCo
+        </span>
+    </a>
+
+    <div class="flex items-center gap-4">
+
+        <button class="nav-link text-sm">
+            Perfil
+        </button>
+
+        <button class="nav-link text-sm">
+            Configuración
+        </button>
+
+        <a href="{{ url_for('login') }}" class="btn-secondary px-4 py-2 text-sm rounded-xl">
+            Cerrar sesión
+        </a>
+
+    </div>
+
+</header>
