@@ -1,0 +1,102 @@
+<aside class="w-72 h-screen sticky top-0 border-r border-[var(--color-border)] bg-[var(--color-bg-secondary)] hidden lg:flex lg:flex-col">
+    <nav class="flex flex-col py-4">
+
+        <a href="{{ url_for('dashboard') }}"
+           class="px-6 py-4 border-b border-[var(--color-border)] border-l-4 transition
+                  {% if request.endpoint == 'dashboard' %}
+                    border-l-[var(--color-brand-primary)]
+                    bg-emerald-500/5
+                    text-[var(--color-brand-primary)]
+                    font-semibold
+                  {% else %}
+                    border-l-transparent
+                    text-zinc-400
+                    hover:bg-emerald-500/5
+                    hover:text-white
+                  {% endif %}">
+            Home
+        </a>
+
+        <a href="{{ url_for('movimientos') }}"
+           class="px-6 py-4 border-b border-[var(--color-border)] border-l-4 transition
+                  {% if request.endpoint == 'movimientos' %}
+                    border-l-[var(--color-brand-primary)]
+                    bg-emerald-500/5
+                    text-[var(--color-brand-primary)]
+                    font-semibold
+                  {% else %}
+                    border-l-transparent
+                    text-zinc-400
+                    hover:bg-emerald-500/5
+                    hover:text-white
+                  {% endif %}">
+            Movimientos
+        </a>
+
+        <a href="{{ url_for('categorias') }}"
+           class="px-6 py-4 border-b border-[var(--color-border)] border-l-4 transition
+                  {% if request.endpoint == 'movimientos' %}
+                    border-l-[var(--color-brand-primary)]
+                    bg-emerald-500/5
+                    text-[var(--color-brand-primary)]
+                    font-semibold
+                  {% else %}
+                    border-l-transparent
+                    text-zinc-400
+                    hover:bg-emerald-500/5
+                    hover:text-white
+                  {% endif %}">
+            Categorías
+        </a>
+
+        <a href="{{ url_for('proyecciones') }}"
+           class="px-6 py-4 border-b border-[var(--color-border)] border-l-4 transition
+                  {% if request.endpoint == 'proyecciones' %}
+                    border-l-[var(--color-brand-primary)]
+                    bg-emerald-500/5
+                    text-[var(--color-brand-primary)]
+                    font-semibold
+                  {% else %}
+                    border-l-transparent
+                    text-zinc-400
+                    hover:bg-emerald-500/5
+                    hover:text-white
+                  {% endif %}">
+            Proyecciones
+        </a>
+
+        <a href="{{ url_for('reportes') }}"
+           class="px-6 py-4 border-b border-[var(--color-border)] border-l-4 transition
+                  {% if request.endpoint == 'reportes' %}
+                    border-l-[var(--color-brand-primary)]
+                    bg-emerald-500/5
+                    text-[var(--color-brand-primary)]
+                    font-semibold
+                  {% else %}
+                    border-l-transparent
+                    text-zinc-400
+                    hover:bg-emerald-500/5
+                    hover:text-white
+                  {% endif %}">
+            Reportes
+        </a>
+
+        <a href="{{ url_for('independencia') }}"
+           class="px-6 py-4 border-b border-[var(--color-border)] border-l-4 transition
+                  {% if request.endpoint == 'independencia' %}
+                    border-l-[var(--color-brand-primary)]
+                    bg-emerald-500/5
+                    text-[var(--color-brand-primary)]
+                    font-semibold
+                  {% else %}
+                    border-l-transparent
+                    text-zinc-400
+                    hover:bg-emerald-500/5
+                    hover:text-white
+                  {% endif %}">
+            Independencia
+        </a>
+
+    </nav>
+
+</aside>

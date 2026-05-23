@@ -1,0 +1,157 @@
+{% extends "layouts/dashboard_base.html" %}
+
+{% block title%}
+
+FiCo | Categorías
+
+{% endblock%}
+
+{% block content %}
+<section class="space-y-8">
+
+  <header class="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+    <div>
+      <p class="text-sm text-[var(--color-text-muted)]">Dashboard / Categorías</p>
+      <h1 class="mt-2 text-3xl font-semibold">Categorías</h1>
+      <p class="mt-2 max-w-2xl muted-text">
+        Organizá tus ingresos y gastos para mejorar tus reportes y proyecciones.
+      </p>
+    </div>
+
+    <button class="btn-primary">
+      Nueva categoría
+    </button>
+  </header>
+
+  <div class="grid gap-5 md:grid-cols-3">
+
+    <article class="card card-padding">
+      <p class="text-sm muted-text">Categorías activas</p>
+      <h2 class="mt-3 text-2xl font-semibold">12</h2>
+      <p class="mt-2 text-sm text-[var(--color-brand-primary)]">7 de gastos · 5 de ingresos</p>
+    </article>
+
+    <article class="card card-padding">
+      <p class="text-sm muted-text">Más usada</p>
+      <h2 class="mt-3 text-2xl font-semibold">Comida</h2>
+      <p class="mt-2 text-sm text-[var(--color-text-muted)]">18 movimientos este mes</p>
+    </article>
+
+    <article class="card card-padding">
+      <p class="text-sm muted-text">Mayor gasto</p>
+      <h2 class="mt-3 text-2xl font-semibold">Servicios</h2>
+      <p class="mt-2 text-sm text-red-400">$117.500 este mes</p>
+    </article>
+
+  </div>
+
+  <section class="card card-padding space-y-6">
+
+    <div class="flex flex-col gap-4 xl:flex-row xl:items-end xl:justify-between">
+      <div>
+        <h2 class="text-xl font-semibold">Listado de categorías</h2>
+        <p class="mt-1 text-sm muted-text">
+          Administrá categorías de ingresos y gastos.
+        </p>
+      </div>
+
+      <div class="grid gap-3 sm:grid-cols-2 xl:grid-cols-3 xl:min-w-[560px]">
+        <input type="text" class="input" placeholder="Buscar categoría...">
+
+        <select class="input">
+          <option>Todos los tipos</option>
+          <option>Ingreso</option>
+          <option>Gasto</option>
+        </select>
+
+        <select class="input">
+          <option>Todas</option>
+          <option>Activas</option>
+          <option>Inactivas</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="overflow-hidden rounded-2xl border border-[var(--color-border)]">
+
+      <div class="hidden grid-cols-[1.2fr_0.8fr_1fr_1fr_0.8fr] gap-4 bg-[var(--color-bg-primary)] px-5 py-3 text-sm text-[var(--color-text-muted)] md:grid">
+        <span>Nombre</span>
+        <span>Tipo</span>
+        <span>Clasificación</span>
+        <span>Uso mensual</span>
+        <span class="text-right">Acciones</span>
+      </div>
+
+      <div class="divide-y divide-[var(--color-border)]">
+
+        <article class="grid gap-3 px-5 py-4 md:grid-cols-[1.2fr_0.8fr_1fr_1fr_0.8fr] md:items-center">
+          <div>
+            <p class="font-medium">Comida</p>
+            <p class="text-sm text-[var(--color-text-muted)] md:hidden">Gasto · Necesario</p>
+          </div>
+
+          <span class="badge w-fit">Gasto</span>
+          <p class="hidden text-sm muted-text md:block">Necesario</p>
+          <p class="text-sm muted-text">18 movimientos</p>
+
+          <div class="flex gap-3 md:justify-end">
+            <button class="text-sm auth-link">Editar</button>
+            <button class="text-sm text-red-400 transition hover:text-red-300">Eliminar</button>
+          </div>
+        </article>
+
+        <article class="grid gap-3 px-5 py-4 md:grid-cols-[1.2fr_0.8fr_1fr_1fr_0.8fr] md:items-center">
+          <div>
+            <p class="font-medium">Sueldo</p>
+            <p class="text-sm text-[var(--color-text-muted)] md:hidden">Ingreso</p>
+          </div>
+
+          <span class="badge w-fit">Ingreso</span>
+          <p class="hidden text-sm muted-text md:block">—</p>
+          <p class="text-sm muted-text">1 movimiento</p>
+
+          <div class="flex gap-3 md:justify-end">
+            <button class="text-sm auth-link">Editar</button>
+            <button class="text-sm text-red-400 transition hover:text-red-300">Eliminar</button>
+          </div>
+        </article>
+
+        <article class="grid gap-3 px-5 py-4 md:grid-cols-[1.2fr_0.8fr_1fr_1fr_0.8fr] md:items-center">
+          <div>
+            <p class="font-medium">Ocio</p>
+            <p class="text-sm text-[var(--color-text-muted)] md:hidden">Gasto · Prescindible</p>
+          </div>
+
+          <span class="badge w-fit">Gasto</span>
+          <p class="hidden text-sm muted-text md:block">Prescindible</p>
+          <p class="text-sm muted-text">6 movimientos</p>
+
+          <div class="flex gap-3 md:justify-end">
+            <button class="text-sm auth-link">Editar</button>
+            <button class="text-sm text-red-400 transition hover:text-red-300">Eliminar</button>
+          </div>
+        </article>
+
+        <article class="grid gap-3 px-5 py-4 md:grid-cols-[1.2fr_0.8fr_1fr_1fr_0.8fr] md:items-center">
+          <div>
+            <p class="font-medium">Servicios</p>
+            <p class="text-sm text-[var(--color-text-muted)] md:hidden">Gasto · Obligatorio</p>
+          </div>
+
+          <span class="badge w-fit">Gasto</span>
+          <p class="hidden text-sm muted-text md:block">Obligatorio</p>
+          <p class="text-sm muted-text">4 movimientos</p>
+
+          <div class="flex gap-3 md:justify-end">
+            <button class="text-sm auth-link">Editar</button>
+            <button class="text-sm text-red-400 transition hover:text-red-300">Eliminar</button>
+          </div>
+        </article>
+
+      </div>
+    </div>
+
+  </section>
+
+</section>
+{% endblock %}
