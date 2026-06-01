@@ -19,16 +19,16 @@ Ingresar | FiCo
             </p>
         </div>
 
-        <form class="space-y-6">
+        {% include 'components/shared/flash_messages.html' %}
+
+        <form method="POST" action="{{ url_for('login') }}" class="space-y-6">
 
             <div>
                 <label class="label">
                     Correo electrónico
                 </label>
 
-                <input type="email"
-                       placeholder="ejemplo@email.com"
-                       class="input">
+                <input type="email" name="email" placeholder="ejemplo@email.com" class="input">
             </div>
 
             <div>
@@ -42,13 +42,10 @@ Ingresar | FiCo
                     </a>
                 </div>
 
-                <input type="password"
-                       placeholder="••••••••"
-                       class="input">
+                <input type="password" name="password" placeholder="••••••••" class="input">
             </div>
 
-            <button type="submit"
-                    class="btn-primary w-full shadow-lg shadow-emerald-500/10">
+            <button type="submit" class="btn-primary w-full shadow-lg shadow-emerald-500/10">
                 Ingresar
             </button>
 

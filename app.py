@@ -15,7 +15,6 @@ db.init_app(app)
 from routes.auth import register_routes as auth_routes
 from routes.dashboard import register_routes as dashboard_routes
 from routes.transacciones import register_routes as transacciones_routes
-from routes.categorias import register_routes as categorias_routes
 from routes.presupuestos import register_routes as presupuestos_routes
 from routes.objetivos import register_routes as objetivos_routes
 from routes.reportes import register_routes as reportes_routes
@@ -24,7 +23,6 @@ from routes.simulador import register_routes as simulador_routes
 auth_routes(app)
 dashboard_routes(app)
 transacciones_routes(app)
-categorias_routes(app)
 presupuestos_routes(app)
 objetivos_routes(app)
 reportes_routes(app)
@@ -33,13 +31,10 @@ simulador_routes(app)
 # creo tablas
 with app.app_context():
     from models.usuario import Usuario
-    from models.categoria import Categoria
     from models.transaccion import Transaccion
     from models.presupuesto import Presupuesto
     from models.objetivo_ahorro import ObjetivoAhorro
-    from models.proyeccion import ProyeccionFinanciera
     from models.simulacion_if import SimulacionIF
-    from models.alerta import Alerta
     db.create_all()
 
 
@@ -66,58 +61,3 @@ if __name__ == '__main__':
 
 
 
-"""from flask import Flask, render_template
-
-app = Flask(__name__)
-
-
-#----------RUTAS PÚBLICAS-----------#
-
-@app.route('/')
-def inicio():
-    return render_template('public/index.html')
-
-@app.route('/login')
-def login():
-    return render_template('auth/login.html')
-
-
-@app.route('/register')
-def register():
-    return render_template('auth/register.html')
-
-@app.route('/simulador')
-def simulador():
-    return render_template('public/simulador.html')
-
-
-#----------RUTAS DASHBOARD-----------#
-
-@app.route('/dashboard')
-def dashboard():
-    return render_template('dashboard/home.html')
-
-@app.route('/dashboard/movimientos')
-def movimientos():
-    return render_template('dashboard/movimientos.html')
-
-@app.route('/dashboard/categorias')
-def categorias():
-    return render_template('dashboard/categorias.html')
-
-@app.route('/dashboard/proyecciones')
-def proyecciones():
-    return render_template('dashboard/proyecciones.html')
-
-@app.route('/dashboard/reportes')
-def reportes():
-    return render_template('dashboard/reportes.html')
-
-@app.route('/dashboard/independencia')
-def independencia():
-    return render_template('dashboard/independencia.html')
-
-
-
-if __name__ == '__main__':
-    app.run(debug=True)"""

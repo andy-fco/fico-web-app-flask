@@ -1,7 +1,6 @@
 from flask import request, redirect, url_for, render_template, flash
 from extensions import db
 from models.presupuesto import Presupuesto
-from models.categoria import Categoria
 from routes import login_required, get_usuario_actual
 from datetime import date
 

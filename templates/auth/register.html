@@ -19,16 +19,16 @@ Registro | FiCo
             </p>
         </div>
 
-        <form class="space-y-6">
+        {% include 'components/shared/flash_messages.html' %}
+
+        <form method="POST" action="{{ url_for('register') }}" class="space-y-6">
 
             <div>
                 <label class="label">
                     Nombre
                 </label>
 
-                <input type="text"
-                       placeholder="Tu nombre"
-                       class="input">
+                <input type="text" name="nombre" placeholder="Tu nombre" class="input">
             </div>
 
             <div>
@@ -36,9 +36,7 @@ Registro | FiCo
                     Correo electrónico
                 </label>
 
-                <input type="email"
-                       placeholder="ejemplo@email.com"
-                       class="input">
+                <input type="email" name="email" placeholder="ejemplo@email.com" class="input">
             </div>
 
             <div>
@@ -46,9 +44,7 @@ Registro | FiCo
                     Contraseña
                 </label>
 
-                <input type="password"
-                       placeholder="••••••••"
-                       class="input">
+                <input type="password" name="password" placeholder="••••••••" class="input">
             </div>
 
             <div>
@@ -56,13 +52,10 @@ Registro | FiCo
                     Confirmar contraseña
                 </label>
 
-                <input type="password"
-                       placeholder="••••••••"
-                       class="input">
+                <input type="password" name="confirm_password" placeholder="••••••••" class="input">
             </div>
 
-            <button type="submit"
-                    class="btn-primary w-full shadow-lg shadow-emerald-500/10">
+            <button type="submit" class="btn-primary w-full shadow-lg shadow-emerald-500/10">
                 Crear cuenta
             </button>
 

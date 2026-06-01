@@ -1,19 +1,16 @@
 from flask import render_template
-from extensions import db
 from models.transaccion import Transaccion
-from models.alerta import Alerta
 from routes import login_required, get_usuario_actual
 from datetime import date
 
 
 def register_routes(app):
 
-    @app.route("/")
     @app.route("/dashboard")
     @login_required
     def dashboard():
         usuario = get_usuario_actual()
-        hoy     = date.today()
+        hoy = date.today()
 
         transacciones_mes = Transaccion.query.filter(
             Transaccion.id_usuario == usuario.id_usuario,
@@ -22,9 +19,8 @@ def register_routes(app):
         ).order_by(Transaccion.fecha.desc()).all()
 
         ingresos_mes = sum(t.monto for t in transacciones_mes if t.tipo == "ingreso")
-        egresos_mes  = sum(t.monto for t in transacciones_mes if t.tipo == "egreso")
+        egresos_mes = sum(t.monto for t in transacciones_mes if t.tipo == "egreso")
 
-        alertas  = Alerta.query.filter_by(id_usuario=usuario.id_usuario, leida=False).all()
         objetivos = usuario.objetivos
 
         return render_template(
@@ -35,6 +31,6 @@ def register_routes(app):
             ahorro_mes=ingresos_mes - egresos_mes,
             saldo_total=usuario.get_saldo_total(),
             ultimas_transacciones=transacciones_mes[:5],
-            alertas=alertas,
+            alertas=[],
             objetivos=objetivos,
         )

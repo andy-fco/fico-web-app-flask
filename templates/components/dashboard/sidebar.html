@@ -33,21 +33,7 @@
             Movimientos
         </a>
 
-        <a href="{{ url_for('categorias') }}"
-           class="px-6 py-4 border-b border-[var(--color-border)] border-l-4 transition
-                  {% if request.endpoint == 'movimientos' %}
-                    border-l-[var(--color-brand-primary)]
-                    bg-emerald-500/5
-                    text-[var(--color-brand-primary)]
-                    font-semibold
-                  {% else %}
-                    border-l-transparent
-                    text-zinc-400
-                    hover:bg-emerald-500/5
-                    hover:text-white
-                  {% endif %}">
-            Categorías
-        </a>
+        
 
         <a href="{{ url_for('proyecciones') }}"
            class="px-6 py-4 border-b border-[var(--color-border)] border-l-4 transition
