@@ -26,6 +26,7 @@
             {% include 'components/dashboard/sidebar.html' %}
 
             <main class="flex-1 p-6 lg:p-8">
+                {% include 'components/shared/flash_messages.html' %}
                 {% block content %}
                 {% endblock %}
             </main>
@@ -33,7 +34,7 @@
         </div>
 
         {% include 'components/dashboard/chat_widget.html' %}
-
+        {% include 'components/shared/confirm_modal.html' %}
     </div>
 
 </body>

@@ -208,6 +208,20 @@
     border-color: var(--color-brand-primary);
   }
 
+  .input[type="date"] {
+    color-scheme: dark;
+  }
+
+  .select-input {
+    @apply cursor-pointer pr-10;
+    color-scheme: dark;
+  }
+
+  .select-input option {
+    background-color: var(--color-bg-secondary);
+    color: var(--color-text-primary);
+  }
+
   /*---------Labels----------*/
   .label {
     @apply block
@@ -227,4 +241,5 @@
   .auth-link:hover {
     color: var(--color-brand-hover);
   }
+
 }

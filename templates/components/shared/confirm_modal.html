@@ -1,0 +1,75 @@
+<div
+  id="confirm_modal"
+  class="fixed inset-0 z-50 hidden items-center justify-center bg-black/60 px-4 backdrop-blur-sm"
+>
+  <div class="w-full max-w-md rounded-3xl border border-[var(--color-border)] bg-[var(--color-bg-secondary)] p-6 shadow-2xl">
+    <div class="space-y-2">
+      <h2 id="confirm_modal_title" class="text-xl font-semibold">
+        Confirmar acción
+      </h2>
+
+      <p id="confirm_modal_message" class="text-sm muted-text">
+        Esta acción no se puede deshacer.
+      </p>
+    </div>
+
+    <div class="mt-6 flex justify-end gap-3">
+      <button
+        type="button"
+        id="confirm_modal_cancel"
+        class="btn-secondary"
+      >
+        Cancelar
+      </button>
+
+      <button
+        type="button"
+        id="confirm_modal_accept"
+        class="rounded-2xl bg-[var(--color-danger)] px-5 py-3 text-sm font-semibold text-white transition hover:bg-red-500"
+      >
+        Eliminar
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+  let formToSubmit = null;
+
+  const confirmModal = document.getElementById("confirm_modal");
+  const confirmModalTitle = document.getElementById("confirm_modal_title");
+  const confirmModalMessage = document.getElementById("confirm_modal_message");
+  const confirmModalCancel = document.getElementById("confirm_modal_cancel");
+  const confirmModalAccept = document.getElementById("confirm_modal_accept");
+
+  function openConfirmModal(form, title, message) {
+    formToSubmit = form;
+
+    confirmModalTitle.textContent = title;
+    confirmModalMessage.textContent = message;
+
+    confirmModal.classList.remove("hidden");
+    confirmModal.classList.add("flex");
+  }
+
+  function closeConfirmModal() {
+    formToSubmit = null;
+
+    confirmModal.classList.add("hidden");
+    confirmModal.classList.remove("flex");
+  }
+
+  confirmModalCancel.addEventListener("click", closeConfirmModal);
+
+  confirmModalAccept.addEventListener("click", () => {
+    if (formToSubmit) {
+      formToSubmit.submit();
+    }
+  });
+
+  confirmModal.addEventListener("click", (event) => {
+    if (event.target === confirmModal) {
+      closeConfirmModal();
+    }
+  });
+</script>
