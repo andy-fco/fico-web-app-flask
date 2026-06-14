@@ -1,4 +1,6 @@
-<form class="card card-padding space-y-8">
+<form class="card card-padding space-y-8"
+      method="POST"
+      action="{{ form_action }}">
 
   <div>
     <h2 class="text-2xl font-bold mb-2">
@@ -18,7 +20,10 @@
       </label>
 
       <input type="number"
-             name="monthly_expenses"
+             name="gastos_mensuales"
+             min="0"
+             step="1000"
+             value="{{ valores.gastos_mensuales | default(450000) }}"
              placeholder="Ej: 450000"
              class="input">
     </div>
@@ -29,9 +34,27 @@
       </label>
 
       <input type="number"
-             name="initial_capital"
+             name="capital_inicial"
+             min="0"
+             step="1000"
+             value="{{ valores.capital_inicial | default(1000000) }}"
              placeholder="Ej: 1000000"
              class="input">
+    </div>
+
+    <div>
+      <label class="label">
+        Moneda
+      </label>
+
+      <select name="moneda" class="input select-input">
+        <option value="ARS" {% if valores.moneda | default("ARS") == "ARS" %}selected{% endif %}>
+          Pesos argentinos
+        </option>
+        <option value="USD" {% if valores.moneda | default("ARS") == "USD" %}selected{% endif %}>
+          Dólares
+        </option>
+      </select>
     </div>
 
     <div>
@@ -41,17 +64,15 @@
         </label>
 
         <span id="monthly-investment-output"
-              class="text-sm text-[var(--color-brand-primary)] font-semibold">
-          $75.000
-        </span>
+              class="text-sm text-[var(--color-brand-primary)] font-semibold"></span>
       </div>
 
       <input type="range"
-             name="monthly_investment"
+             name="ahorro_disponible"
              min="0"
              max="500000"
              step="5000"
-             value="75000"
+             value="{{ valores.ahorro_disponible | default(75000) }}"
              data-target="monthly-investment-output"
              data-format="money"
              class="w-full accent-emerald-400 cursor-pointer">
@@ -69,23 +90,21 @@
         </label>
 
         <span id="annual-return-output"
-              class="text-sm text-[var(--color-brand-primary)] font-semibold">
-          6%
-        </span>
+              class="text-sm text-[var(--color-brand-primary)] font-semibold"></span>
       </div>
 
       <input type="range"
-             name="annual_return"
-             min="1"
+             name="tasa_rendimiento"
+             min="0"
              max="15"
              step="0.5"
-             value="6"
+             value="{{ valores.tasa_rendimiento | default(6) }}"
              data-target="annual-return-output"
              data-format="percent"
              class="w-full accent-emerald-400 cursor-pointer">
 
       <div class="flex justify-between text-xs text-[var(--color-text-muted)] mt-2">
-        <span>1%</span>
+        <span>0%</span>
         <span>15%</span>
       </div>
     </div>
@@ -99,16 +118,14 @@
           </label>
 
           <span id="current-age-output"
-                class="text-sm text-[var(--color-brand-primary)] font-semibold">
-            22
-          </span>
+                class="text-sm text-[var(--color-brand-primary)] font-semibold"></span>
         </div>
 
         <input type="range"
-               name="current_age"
+               name="edad_actual"
                min="16"
                max="70"
-               value="22"
+               value="{{ valores.edad_actual | default(22) }}"
                data-target="current-age-output"
                data-format="number"
                class="w-full accent-emerald-400 cursor-pointer">
@@ -121,16 +138,14 @@
           </label>
 
           <span id="target-age-output"
-                class="text-sm text-[var(--color-brand-primary)] font-semibold">
-            45
-          </span>
+                class="text-sm text-[var(--color-brand-primary)] font-semibold"></span>
         </div>
 
         <input type="range"
-               name="target_age"
+               name="edad_objetivo"
                min="18"
                max="80"
-               value="45"
+               value="{{ valores.edad_objetivo | default(45) }}"
                data-target="target-age-output"
                data-format="number"
                class="w-full accent-emerald-400 cursor-pointer">
@@ -143,31 +158,51 @@
         Configuración avanzada
       </summary>
 
-      <div class="mt-4">
-        <div class="flex items-center justify-between mb-2">
-          <label class="label mb-0">
-            Tasa de retiro segura
-          </label>
+      <div class="mt-4 space-y-6">
 
-          <span id="safe-withdrawal-rate-output"
-                class="text-sm text-[var(--color-brand-primary)] font-semibold">
-            4%
-          </span>
+        <div>
+          <div class="flex items-center justify-between mb-2">
+            <label class="label mb-0">
+              Tasa de retiro segura
+            </label>
+
+            <span id="safe-withdrawal-rate-output"
+                  class="text-sm text-[var(--color-brand-primary)] font-semibold"></span>
+          </div>
+
+          <input type="range"
+                 name="tasa_retiro"
+                 min="2"
+                 max="6"
+                 step="0.25"
+                 value="{{ valores.tasa_retiro | default(4) }}"
+                 data-target="safe-withdrawal-rate-output"
+                 data-format="percent"
+                 class="w-full accent-emerald-400 cursor-pointer">
+
+          <p class="text-xs text-[var(--color-text-muted)] mt-3 leading-relaxed">
+            Representa el porcentaje anual que estimás retirar de tu capital para cubrir gastos.
+          </p>
         </div>
 
-        <input type="range"
-               name="safe_withdrawal_rate"
-               min="2"
-               max="6"
-               step="0.25"
-               value="4"
-               data-target="safe-withdrawal-rate-output"
-               data-format="percent"
-               class="w-full accent-emerald-400 cursor-pointer">
+        <div>
+          <label class="label">
+            Capital objetivo manual
+          </label>
 
-        <p class="text-xs text-[var(--color-text-muted)] mt-3 leading-relaxed">
-          Representa el porcentaje anual que estimás retirar de tu capital para cubrir gastos.
-        </p>
+          <input type="number"
+                 name="capital_objetivo"
+                 min="0"
+                 step="1000"
+                 value="{{ valores.capital_objetivo | default('', true) }}"
+                 placeholder="Opcional. Si lo dejás vacío, FiCo lo calcula."
+                 class="input">
+
+          <p class="text-xs text-[var(--color-text-muted)] mt-3 leading-relaxed">
+            Si no ingresás un capital objetivo, se calcula automáticamente con la regla de retiro.
+          </p>
+        </div>
+
       </div>
     </details>
 

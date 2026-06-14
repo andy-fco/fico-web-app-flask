@@ -1,0 +1,306 @@
+{% extends 'layouts/dashboard_base.html' %}
+
+{% block title %}
+FiCo | Objetivos
+{% endblock %}
+
+{% block content %}
+<section class="space-y-10">
+
+  <header class="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+    <div>
+      <p class="text-sm text-[var(--color-text-muted)]">Dashboard / Objetivos</p>
+
+      <h1 class="mt-2 text-3xl font-semibold">
+        Objetivos de ahorro
+      </h1>
+
+      <p class="mt-2 max-w-2xl muted-text">
+        Creá metas financieras, registrá aportes y seguí tu progreso hasta completarlas.
+      </p>
+    </div>
+  </header>
+
+  <div class="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
+
+    <article class="card card-padding">
+      <p class="text-sm muted-text">Objetivos activos</p>
+      <h2 class="mt-3 text-2xl font-semibold">{{ metricas.activos }}</h2>
+      <p class="mt-2 text-sm text-[var(--color-text-muted)]">En seguimiento</p>
+    </article>
+
+    <article class="card card-padding">
+      <p class="text-sm muted-text">Objetivos logrados</p>
+      <h2 class="mt-3 text-2xl font-semibold">{{ metricas.logrados }}</h2>
+      <p class="mt-2 text-sm text-[var(--color-brand-primary)]">Completados</p>
+    </article>
+
+    <article class="card card-padding">
+      <p class="text-sm muted-text">Monto ahorrado</p>
+
+      <div class="mt-4 space-y-2">
+
+        <div class="text-2xl font-semibold">
+          ARS ${{ "{:,.0f}".format(metricas.monto_ahorrado_ars).replace(",", ".") }}
+        </div>
+
+        <div class="text-2xl font-semibold">
+          USD ${{ "{:,.0f}".format(metricas.monto_ahorrado_usd).replace(",", ".") }}
+        </div>
+
+      </div>
+
+    </article>
+
+    <article class="card card-padding">
+      <p class="text-sm muted-text">Progreso promedio</p>
+      <h2 class="mt-3 text-2xl font-semibold">{{ metricas.progreso_promedio }}%</h2>
+      <p class="mt-2 text-sm text-[var(--color-text-muted)]">Promedio general</p>
+    </article>
+
+  </div>
+
+  <section class="grid items-start gap-6 xl:grid-cols-[0.8fr_1.2fr]">
+
+    <article class="card card-padding">
+      <h2 class="text-2xl font-semibold">
+        Crear objetivo
+      </h2>
+
+      <p class="mt-2 muted-text text-sm">
+        Definí una meta de ahorro con monto objetivo, moneda y fecha límite opcional.
+      </p>
+
+      <form action="{{ url_for('nuevo_objetivo') }}" method="POST" class="mt-8 space-y-5">
+
+        <div>
+          <label class="label">Nombre</label>
+          <input type="text" name="nombre" placeholder="Ej: Notebook, viaje, fondo de emergencia" class="input"
+            required>
+        </div>
+
+        <div class="grid gap-4 sm:grid-cols-2">
+          <div>
+            <label class="label">Monto objetivo</label>
+            <input type="number" name="monto_objetivo" min="1" step="0.01" placeholder="Ej: 1500000" class="input"
+              required>
+          </div>
+
+          <div>
+            <label class="label">Monto actual</label>
+            <input type="number" name="monto_actual" min="0" step="0.01" placeholder="Ej: 250000" class="input">
+          </div>
+        </div>
+
+        <div class="grid gap-4 sm:grid-cols-2">
+          <div>
+            <label class="label">Moneda</label>
+            <select name="moneda" class="input select-input">
+              <option value="ARS">Pesos argentinos</option>
+              <option value="USD">Dólares</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="label">Fecha límite</label>
+            <input type="date" name="fecha_limite" class="input">
+          </div>
+        </div>
+
+        <button type="submit" class="btn-primary w-full">
+          Crear objetivo
+        </button>
+
+      </form>
+    </article>
+
+    <section class="space-y-5">
+
+      <div>
+        <h2 class="text-2xl font-semibold">Tus objetivos</h2>
+        <p class="mt-1 muted-text">
+          Registrá aportes y revisá el avance de cada meta.
+        </p>
+      </div>
+
+      {% if objetivos %}
+
+      <div class="grid gap-5 lg:grid-cols-2">
+
+        {% for objetivo in objetivos %}
+
+        {% set progreso = objetivo.get_progreso() %}
+        {% set progreso_barra = 100 if progreso > 100 else progreso %}
+        {% set simbolo = "US$" if objetivo.moneda == "USD" else "$" %}
+        {% set dias = objetivo.dias_restantes() %}
+
+        <article class="card card-padding card-hover {% if objetivo.estado == 'pausado' %}opacity-60{% endif %}">
+
+          <div class="flex items-start justify-between gap-4">
+            <div>
+              {% if objetivo.estado == "logrado" %}
+              <p class="text-sm text-[var(--color-brand-primary)]">Logrado</p>
+              {% elif objetivo.estado == "pausado" %}
+              <p class="text-sm text-[var(--color-text-muted)]">Pausado</p>
+              {% else %}
+              <p class="text-sm text-[var(--color-brand-primary)]">Activo</p>
+              {% endif %}
+
+              <h3 class="mt-2 text-xl font-semibold">
+                {{ objetivo.nombre }}
+              </h3>
+            </div>
+
+            <span class="badge">
+              {{ progreso }}%
+            </span>
+          </div>
+
+          <div class="mt-6">
+            <div class="mb-2 flex justify-between text-sm">
+              <span class="muted-text">
+                {{ simbolo }}{{ "{:,.0f}".format(objetivo.monto_actual | float).replace(",", ".") }}
+              </span>
+
+              <span class="muted-text">
+                {{ simbolo }}{{ "{:,.0f}".format(objetivo.monto_objetivo | float).replace(",", ".") }}
+              </span>
+            </div>
+
+            <div class="h-3 rounded-full bg-[var(--color-bg-tertiary)] overflow-hidden">
+              <div class="h-3 rounded-full bg-[var(--color-brand-primary)]" style="width: {{ progreso_barra | int }}%">
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-5 space-y-3">
+
+            <div class="flex justify-between gap-4 text-sm">
+              <span class="muted-text">Monto restante</span>
+              <span class="font-medium">
+                {% set restante = (objetivo.monto_objetivo | float) - (objetivo.monto_actual | float) %}
+                {{ simbolo }}{{ "{:,.0f}".format(0 if restante < 0 else restante).replace(",", "." ) }} </span>
+            </div>
+
+            <div class="flex justify-between gap-4 text-sm">
+              <span class="muted-text">Fecha límite</span>
+              <span class="font-medium">
+                {% if objetivo.fecha_limite %}
+                {{ objetivo.fecha_limite.strftime("%d/%m/%Y") }}
+                {% else %}
+                Sin fecha
+                {% endif %}
+              </span>
+            </div>
+
+            <div class="flex justify-between gap-4 text-sm">
+              <span class="muted-text">Días restantes</span>
+              <span class="font-medium">
+                {% if dias is none %}
+                —
+                {% else %}
+                {{ dias }} días
+                {% endif %}
+              </span>
+            </div>
+
+          </div>
+
+          {% if objetivo.estado == "activo" %}
+          <form action="{{ url_for('aportar_objetivo', id=objetivo.id_objetivo) }}" method="POST"
+            class="mt-6 flex gap-3">
+
+            <input type="number" name="monto" min="1" step="0.01" placeholder="Monto a aportar" class="input">
+
+            <button type="submit" class="btn-primary px-5 py-3 text-sm">
+              Aportar
+            </button>
+
+          </form>
+
+          {% elif objetivo.estado == "pausado" %}
+          <div class="mt-6 rounded-2xl border border-zinc-700 bg-zinc-900/60 p-4">
+            <p class="text-sm muted-text">
+              Objetivo pausado. Reactivalo para registrar nuevos aportes.
+            </p>
+          </div>
+
+          {% else %}
+          <div class="mt-6 rounded-2xl border border-emerald-500/20 bg-emerald-500/10 p-4">
+            <p class="text-sm text-[var(--color-brand-primary)] font-medium">
+              Objetivo completado
+            </p>
+          </div>
+          {% endif %}
+
+          <div class="mt-6 flex items-center justify-between border-t border-[var(--color-border)] pt-4">
+
+            <span class="text-sm muted-text">
+              {{ objetivo.moneda }}
+            </span>
+
+            <div class="flex items-center gap-4">
+
+              {% if objetivo.estado == "activo" %}
+              <form action="{{ url_for('pausar_objetivo', id=objetivo.id_objetivo) }}" method="POST">
+                <button type="submit" class="auth-link text-sm">
+                  Pausar
+                </button>
+              </form>
+              {% elif objetivo.estado == "pausado" %}
+              <form action="{{ url_for('reactivar_objetivo', id=objetivo.id_objetivo) }}" method="POST">
+                <button type="submit" class="auth-link text-sm">
+                  Reactivar
+                </button>
+              </form>
+              {% endif %}
+
+              <form action="{{ url_for('eliminar_objetivo', id=objetivo.id_objetivo) }}" method="POST">
+
+                <button type="button" class="text-sm text-red-400 transition hover:text-red-300" onclick="openConfirmModal(
+                this.closest('form'),
+                'Eliminar objetivo',
+                '¿Seguro que querés eliminar este objetivo? Esta acción no se puede deshacer.',
+                'Eliminar'
+              )">
+                  Eliminar
+                </button>
+
+              </form>
+
+            </div>
+
+          </div>
+
+        </article>
+
+        {% endfor %}
+
+      </div>
+
+      {% else %}
+
+      <article class="card card-padding border-dashed border-[var(--color-border)]">
+        <div class="flex min-h-72 flex-col items-center justify-center text-center">
+          <div class="feature-icon mb-5">
+            <div class="feature-icon-dot"></div>
+          </div>
+
+          <h3 class="text-xl font-semibold">
+            Todavía no creaste objetivos
+          </h3>
+
+          <p class="mt-3 max-w-sm muted-text">
+            Creá tu primera meta de ahorro para empezar a seguir tu progreso.
+          </p>
+        </div>
+      </article>
+
+      {% endif %}
+
+    </section>
+
+  </section>
+
+</section>
+{% endblock %}

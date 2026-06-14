@@ -1,3 +1,6 @@
+#Implementación de patrón Singleton
+#La clase guarda las categorías por default del sistema y se llama e instancia desde los controladores
+#para traerlas junto con las categorías personalizadas del usuario
 class AppConfig:
     _instance = None
 

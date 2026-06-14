@@ -6,6 +6,9 @@ Simulación de independencia | FiCo
 
 {% block content %}
 
+{% set moneda = valores.moneda | default("ARS") %}
+{% set simbolo = "US$" if moneda == "USD" else "$" %}
+
 <section class="py-24">
   <div class="section-container">
 
@@ -30,79 +33,164 @@ Simulación de independencia | FiCo
 
       <div class="space-y-6">
 
-        <div class="card card-padding">
-          <p class="text-sm text-[var(--color-text-muted)] mb-2">
-            Capital objetivo estimado
-          </p>
+        {% if resultado %}
 
-          <h2 class="text-4xl font-bold text-[var(--color-brand-primary)] mb-3">
-            $135.000.000
-          </h2>
+          {% set capital_objetivo = resultado.capital_objetivo | float %}
+          {% set aporte_sugerido = resultado.calcular_inversion_mensual() %}
+          {% set meses_estimados = resultado.calcular_tiempo() %}
+          {% set anios_estimados = (meses_estimados / 12) | round(1) %}
+          {% set tiempo_disponible = resultado.edad_objetivo - resultado.edad_actual %}
 
-          <p class="muted-text text-sm">
-            Es el capital aproximado necesario para cubrir tus gastos mediante rendimientos.
-          </p>
-        </div>
-
-        <div class="grid sm:grid-cols-2 gap-4">
-
-          <div class="card p-6">
+          <div class="card card-padding">
             <p class="text-sm text-[var(--color-text-muted)] mb-2">
-              Tiempo disponible
+              Capital objetivo estimado
             </p>
 
-            <h3 class="text-2xl font-bold">
-              23 años
-            </h3>
+            <h2 class="text-4xl font-bold text-[var(--color-brand-primary)] mb-3">
+              {{ simbolo }}{{ "{:,.0f}".format(capital_objetivo).replace(",", ".") }}
+            </h2>
+
+            <p class="muted-text text-sm">
+              Es el capital aproximado necesario para cubrir tus gastos mediante una tasa de retiro del
+              {{ resultado.tasa_retiro }}%.
+            </p>
           </div>
 
-          <div class="card p-6">
+          <div class="grid sm:grid-cols-2 gap-4">
+
+            <div class="card p-6">
+              <p class="text-sm text-[var(--color-text-muted)] mb-2">
+                Tiempo disponible
+              </p>
+
+              <h3 class="text-2xl font-bold">
+                {{ tiempo_disponible }} años
+              </h3>
+            </div>
+
+            <div class="card p-6">
+              <p class="text-sm text-[var(--color-text-muted)] mb-2">
+                Tiempo estimado
+              </p>
+
+              <h3 class="text-2xl font-bold">
+                {% if meses_estimados == 0 %}
+                  No alcanzable
+                {% else %}
+                  {{ anios_estimados }} años
+                {% endif %}
+              </h3>
+            </div>
+
+          </div>
+
+          <div class="card card-padding">
+            <h3 class="text-xl font-semibold mb-4">
+              Resultado de la simulación
+            </h3>
+
+            <div class="space-y-4 mb-6">
+
+              <div class="flex justify-between gap-4 text-sm">
+                <span class="muted-text">Gasto mensual</span>
+                <span class="font-medium">
+                  {{ simbolo }}{{ "{:,.0f}".format(resultado.gastos_mensuales | float).replace(",", ".") }}
+                </span>
+              </div>
+
+              <div class="flex justify-between gap-4 text-sm">
+                <span class="muted-text">Capital inicial</span>
+                <span class="font-medium">
+                  {{ simbolo }}{{ "{:,.0f}".format(resultado.capital_inicial | float).replace(",", ".") }}
+                </span>
+              </div>
+
+              <div class="flex justify-between gap-4 text-sm">
+                <span class="muted-text">Ahorro mensual</span>
+                <span class="font-medium">
+                  {{ simbolo }}{{ "{:,.0f}".format(resultado.ahorro_disponible | float).replace(",", ".") }}
+                </span>
+              </div>
+
+              <div class="flex justify-between gap-4 text-sm">
+                <span class="muted-text">Rendimiento anual</span>
+                <span class="font-medium">{{ resultado.tasa_rendimiento }}%</span>
+              </div>
+
+            </div>
+
+            <div class="rounded-2xl bg-zinc-950/50 border border-zinc-800 p-5">
+              <p class="text-sm text-[var(--color-text-muted)] mb-1">
+                Aporte mensual sugerido para llegar a la edad objetivo
+              </p>
+
+              <p class="text-3xl font-bold">
+                {{ simbolo }}{{ "{:,.0f}".format(aporte_sugerido).replace(",", ".") }}
+              </p>
+            </div>
+          </div>
+
+          <div class="card card-padding border-[var(--color-brand-primary)]/40">
+            <h3 class="text-xl font-semibold mb-3">
+              Guardá esta simulación
+            </h3>
+
+            <p class="muted-text mb-6">
+              Para guardar escenarios, compararlos y retomarlos más adelante, necesitás iniciar sesión o crear una cuenta.
+            </p>
+
+            <div class="grid sm:grid-cols-2 gap-3">
+              <a href="{{ url_for('login') }}" class="btn-secondary w-full">
+                Iniciar sesión
+              </a>
+
+              <a href="{{ url_for('register') }}" class="btn-primary w-full">
+                Crear cuenta gratis
+              </a>
+            </div>
+          </div>
+
+        {% else %}
+
+          <div class="card card-padding">
             <p class="text-sm text-[var(--color-text-muted)] mb-2">
-              Capital proyectado
+              Capital objetivo estimado
             </p>
 
-            <h3 class="text-2xl font-bold">
-              $67.800.000
+            <h2 class="text-4xl font-bold text-[var(--color-brand-primary)] mb-3">
+              —
+            </h2>
+
+            <p class="muted-text text-sm">
+              Completá el formulario para calcular tu capital objetivo, tiempo estimado y aporte mensual sugerido.
+            </p>
+          </div>
+
+          <div class="card card-padding">
+            <h3 class="text-xl font-semibold mb-4">
+              Resultado de la simulación
             </h3>
-          </div>
 
-        </div>
-
-        <div class="card card-padding">
-          <h3 class="text-xl font-semibold mb-4">
-            Resultado de la simulación
-          </h3>
-
-          <p class="muted-text mb-6">
-            Con los valores actuales, todavía existiría una diferencia entre tu capital proyectado
-            y el capital objetivo. Podrías ajustar tu ahorro mensual, extender el plazo o modificar
-            el rendimiento estimado.
-          </p>
-
-          <div class="rounded-2xl bg-zinc-950/50 border border-zinc-800 p-5">
-            <p class="text-sm text-[var(--color-text-muted)] mb-1">
-              Aporte mensual sugerido
-            </p>
-
-            <p class="text-3xl font-bold">
-              $142.000
+            <p class="muted-text">
+              Todavía no hay una simulación calculada. Ingresá tus datos y FiCo estimará un escenario orientativo.
             </p>
           </div>
-        </div>
 
-        <div class="card card-padding border-[var(--color-brand-primary)]/40">
-          <h3 class="text-xl font-semibold mb-3">
-            Guardá esta simulación
-          </h3>
+          <div class="card card-padding border-[var(--color-brand-primary)]/40">
+            <h3 class="text-xl font-semibold mb-3">
+              Guardá tus escenarios
+            </h3>
 
-          <p class="muted-text mb-6">
-            Creá una cuenta para guardar tus escenarios, compararlos y hacer seguimiento de tu progreso.
-          </p>
+            <p class="muted-text mb-6">
+              Creá una cuenta para guardar simulaciones y compararlas desde tu dashboard.
+            </p>
 
-          <a href="{{ url_for('register') }}" class="btn-primary w-full">
-            Crear cuenta gratis
-          </a>
-        </div>
+            <a href="{{ url_for('register') }}" class="btn-primary w-full">
+              Crear cuenta gratis
+            </a>
+          </div>
+
+        {% endif %}
 
       </div>
 

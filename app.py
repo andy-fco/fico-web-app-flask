@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, url_for
 from extensions import db
 from datetime import timedelta
 import os
@@ -46,7 +46,13 @@ def inicio():
 
 @app.route('/simulador')
 def simulador():
-    return render_template('public/simulador.html')
+    return render_template(
+        'public/simulador.html',
+        valores={},
+        resultado=None,
+        form_action=url_for("calcular_simulador_publico"),
+        contexto="publico",
+    )
 
 
 if __name__ == '__main__':

@@ -43,7 +43,8 @@ def register_routes(app):
             return redirect(url_for("dashboard"))
         return render_template("auth/register.html")
 
-    @app.route("/logout")
+    @app.route("/logout", methods=["POST"])
     def logout():
         session.clear()
+        flash("Sesión cerrada correctamente.", "success")
         return redirect(url_for("login"))

@@ -4,14 +4,18 @@
 FiCo | Independencia
 {% endblock %}
 
-
 {% block content %}
+
+{% set moneda = valores.moneda | default("ARS") %}
+{% set simbolo = "US$" if moneda == "USD" else "$" %}
+
 <section class="space-y-8">
 
   <header>
     <h1 class="mt-2 text-3xl font-semibold">Independencia financiera</h1>
     <p class="mt-2 max-w-2xl muted-text">
-      Estimá cuánto capital necesitás para cubrir tus gastos mediante rendimientos y cuánto tiempo podrías tardar en alcanzarlo.
+      Estimá cuánto capital necesitás para cubrir tus gastos mediante rendimientos y cuánto tiempo podrías tardar en
+      alcanzarlo.
     </p>
   </header>
 
@@ -21,11 +25,19 @@ FiCo | Independencia
 
     <section class="space-y-6">
 
+      {% if resultado %}
+
+      {% set capital_objetivo = resultado.capital_objetivo | float %}
+      {% set aporte_sugerido = resultado.calcular_inversion_mensual() %}
+      {% set meses_estimados = resultado.calcular_tiempo() %}
+      {% set anios_estimados = (meses_estimados / 12) | round(1) %}
+      {% set tiempo_disponible = resultado.edad_objetivo - resultado.edad_actual %}
+
       <article class="card card-padding">
         <p class="text-sm text-[var(--color-brand-primary)]">Resultado estimado</p>
 
         <h2 class="mt-3 text-3xl font-semibold">
-          $135.000.000
+          {{ simbolo }}{{ "{:,.0f}".format(capital_objetivo).replace(",", ".") }}
         </h2>
 
         <p class="mt-2 muted-text">
@@ -40,27 +52,38 @@ FiCo | Independencia
 
           <div class="flex justify-between gap-4 text-sm">
             <span class="muted-text">Gasto mensual</span>
-            <span class="font-medium">$450.000</span>
+            <span class="font-medium">
+              {{ simbolo }}{{ "{:,.0f}".format(resultado.gastos_mensuales | float).replace(",", ".") }}
+            </span>
           </div>
 
           <div class="flex justify-between gap-4 text-sm">
             <span class="muted-text">Capital inicial</span>
-            <span class="font-medium">$1.000.000</span>
+            <span class="font-medium">
+              {{ simbolo }}{{ "{:,.0f}".format(resultado.capital_inicial | float).replace(",", ".") }}
+            </span>
           </div>
 
           <div class="flex justify-between gap-4 text-sm">
-            <span class="muted-text">Inversión mensual</span>
-            <span class="font-medium">$75.000</span>
+            <span class="muted-text">Ahorro mensual</span>
+            <span class="font-medium">
+              {{ simbolo }}{{ "{:,.0f}".format(resultado.ahorro_disponible | float).replace(",", ".") }}
+            </span>
           </div>
 
           <div class="flex justify-between gap-4 text-sm">
             <span class="muted-text">Rendimiento anual estimado</span>
-            <span class="font-medium">6%</span>
+            <span class="font-medium">{{ resultado.tasa_rendimiento }}%</span>
           </div>
 
           <div class="flex justify-between gap-4 text-sm">
             <span class="muted-text">Tasa de retiro segura</span>
-            <span class="font-medium">4%</span>
+            <span class="font-medium">{{ resultado.tasa_retiro }}%</span>
+          </div>
+
+          <div class="flex justify-between gap-4 text-sm">
+            <span class="muted-text">Edad objetivo</span>
+            <span class="font-medium">{{ resultado.edad_objetivo }} años</span>
           </div>
 
         </div>
@@ -69,19 +92,86 @@ FiCo | Independencia
       <article class="card card-padding">
         <h2 class="text-xl font-semibold">Proyección</h2>
 
-        <div class="mt-6">
-          <div class="mb-2 flex justify-between text-sm">
-            <span class="muted-text">Camino estimado</span>
-            <span class="text-[var(--color-brand-primary)]">18%</span>
+        <div class="mt-6 space-y-4">
+
+          <div class="flex justify-between gap-4 text-sm">
+            <span class="muted-text">Tiempo disponible</span>
+            <span class="font-medium">{{ tiempo_disponible }} años</span>
           </div>
 
-          <div class="h-3 rounded-full bg-[var(--color-bg-tertiary)]">
-            <div class="h-3 w-[18%] rounded-full bg-[var(--color-brand-primary)]"></div>
+          <div class="flex justify-between gap-4 text-sm">
+            <span class="muted-text">Tiempo estimado para alcanzar el objetivo</span>
+            <span class="font-medium">
+              {% if meses_estimados == 0 %}
+              No alcanzable con estos datos
+              {% else %}
+              {{ anios_estimados }} años
+              {% endif %}
+            </span>
           </div>
+
+        </div>
+
+        <div class="mt-6 rounded-2xl bg-zinc-950/50 border border-zinc-800 p-5">
+          <p class="text-sm text-[var(--color-text-muted)] mb-1">
+            Aporte mensual sugerido para llegar a la edad objetivo
+          </p>
+
+          <p class="text-3xl font-bold">
+            {{ simbolo }}{{ "{:,.0f}".format(aporte_sugerido).replace(",", ".") }}
+          </p>
         </div>
 
         <p class="mt-4 muted-text">
-          Con estos valores, todavía estás lejos del capital objetivo. Aumentar la inversión mensual o reducir gastos acelera significativamente el resultado.
+          Esta estimación depende de los valores ingresados. Aumentar el ahorro mensual, reducir gastos o extender el
+          plazo puede mejorar el resultado.
+        </p>
+      </article>
+
+      <article class="card card-padding border-emerald-500/20 bg-emerald-500/10">
+        <h2 class="text-xl font-semibold">Guardar escenario</h2>
+
+        <p class="mt-3 muted-text">
+          Guardá esta simulación para consultarla después en tu historial de escenarios.
+        </p>
+
+        <form method="POST" action="{{ url_for('guardar_independencia') }}" class="mt-6">
+
+          <input type="hidden" name="gastos_mensuales" value="{{ resultado.gastos_mensuales }}">
+          <input type="hidden" name="ahorro_disponible" value="{{ resultado.ahorro_disponible }}">
+          <input type="hidden" name="tasa_rendimiento" value="{{ resultado.tasa_rendimiento }}">
+          <input type="hidden" name="tasa_retiro" value="{{ resultado.tasa_retiro }}">
+          <input type="hidden" name="edad_actual" value="{{ resultado.edad_actual }}">
+          <input type="hidden" name="edad_objetivo" value="{{ resultado.edad_objetivo }}">
+          <input type="hidden" name="capital_inicial" value="{{ resultado.capital_inicial }}">
+          <input type="hidden" name="capital_objetivo" value="{{ resultado.capital_objetivo }}">
+          <input type="hidden" name="moneda" value="{{ resultado.moneda }}">
+
+          <button type="submit" class="btn-primary w-full">
+            Guardar simulación
+          </button>
+        </form>
+      </article>
+
+      {% else %}
+
+      <article class="card card-padding">
+        <p class="text-sm text-[var(--color-brand-primary)]">Resultado estimado</p>
+
+        <h2 class="mt-3 text-3xl font-semibold">
+          —
+        </h2>
+
+        <p class="mt-2 muted-text">
+          Completá el formulario para calcular tu capital objetivo, tiempo estimado y aporte mensual sugerido.
+        </p>
+      </article>
+
+      <article class="card card-padding">
+        <h2 class="text-xl font-semibold">Resumen de la simulación</h2>
+
+        <p class="mt-4 muted-text">
+          Todavía no hay una simulación calculada. Ingresá tus datos para generar un escenario.
         </p>
       </article>
 
@@ -89,13 +179,12 @@ FiCo | Independencia
         <h2 class="text-xl font-semibold">Lectura rápida</h2>
 
         <p class="mt-3 muted-text">
-          Esta simulación no representa una inversión real, sino una estimación basada en los datos ingresados por el usuario.
+          Esta simulación no representa una inversión real, sino una estimación basada en los datos ingresados por el
+          usuario.
         </p>
-
-        <button class="btn-secondary mt-6 w-full">
-          Guardar simulación
-        </button>
       </article>
+
+      {% endif %}
 
     </section>
 
@@ -103,111 +192,127 @@ FiCo | Independencia
 
 </section>
 
-<section class="space-y-5">
+<section class="mt-12 space-y-5">
 
   <div class="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
     <div>
       <h2 class="text-2xl font-semibold">Simulaciones guardadas</h2>
       <p class="mt-1 muted-text">
-        Consultá escenarios anteriores o retomá una simulación con los valores ya cargados.
+        Consultá escenarios anteriores y compará tus estimaciones de independencia financiera.
       </p>
     </div>
-
-    <button class="btn-secondary">
-      Ver historial completo
-    </button>
   </div>
+
+  {% if simulaciones %}
 
   <div class="grid gap-5 lg:grid-cols-3">
 
-    <article class="card card-padding card-hover">
-      <div class="flex items-start justify-between gap-4">
-        <div>
-          <p class="text-sm text-[var(--color-brand-primary)]">Guardada</p>
-          <h3 class="mt-2 text-xl font-semibold">Escenario conservador</h3>
-        </div>
+    {% for simulacion in simulaciones %}
 
-        <span class="badge">6% anual</span>
-      </div>
-
-      <div class="mt-6 space-y-4">
-        <div class="flex justify-between gap-4 text-sm">
-          <span class="muted-text">Capital objetivo</span>
-          <span class="font-medium">$135.000.000</span>
-        </div>
-
-        <div class="flex justify-between gap-4 text-sm">
-          <span class="muted-text">Gasto mensual</span>
-          <span class="font-medium">$450.000</span>
-        </div>
-
-        <div class="flex justify-between gap-4 text-sm">
-          <span class="muted-text">Inversión mensual</span>
-          <span class="font-medium">$75.000</span>
-        </div>
-
-        <div class="flex justify-between gap-4 text-sm">
-          <span class="muted-text">Edad objetivo</span>
-          <span class="font-medium">45 años</span>
-        </div>
-      </div>
-
-      <button class="auth-link mt-6 text-sm">
-        Abrir simulación
-      </button>
-    </article>
+    {% set sim_moneda = simulacion.moneda | default("ARS") %}
+    {% set sim_simbolo = "US$" if sim_moneda == "USD" else "$" %}
+    {% set sim_capital = simulacion.capital_objetivo or simulacion.calcular_capital_objetivo() %}
 
     <article class="card card-padding card-hover">
       <div class="flex items-start justify-between gap-4">
         <div>
           <p class="text-sm text-[var(--color-brand-primary)]">Guardada</p>
-          <h3 class="mt-2 text-xl font-semibold">Mayor inversión mensual</h3>
+
+          <h3 class="mt-2 text-xl font-semibold">
+            Simulación {{ loop.index }}
+          </h3>
         </div>
 
-        <span class="badge">8% anual</span>
+        <span class="badge">
+          {{ simulacion.tasa_rendimiento }}% anual
+        </span>
       </div>
 
       <div class="mt-6 space-y-4">
+
         <div class="flex justify-between gap-4 text-sm">
           <span class="muted-text">Capital objetivo</span>
-          <span class="font-medium">$120.000.000</span>
+
+          <span class="font-medium">
+            {{ sim_simbolo }}{{ "{:,.0f}".format(sim_capital | float).replace(",", ".") }}
+          </span>
         </div>
 
         <div class="flex justify-between gap-4 text-sm">
           <span class="muted-text">Gasto mensual</span>
-          <span class="font-medium">$400.000</span>
+
+          <span class="font-medium">
+            {{ sim_simbolo }}{{ "{:,.0f}".format(simulacion.gastos_mensuales | float).replace(",", ".") }}
+          </span>
         </div>
 
         <div class="flex justify-between gap-4 text-sm">
-          <span class="muted-text">Inversión mensual</span>
-          <span class="font-medium">$150.000</span>
+          <span class="muted-text">Ahorro mensual</span>
+
+          <span class="font-medium">
+            {{ sim_simbolo }}{{ "{:,.0f}".format(simulacion.ahorro_disponible | float).replace(",", ".") }}
+          </span>
         </div>
 
         <div class="flex justify-between gap-4 text-sm">
           <span class="muted-text">Edad objetivo</span>
-          <span class="font-medium">40 años</span>
+
+          <span class="font-medium">
+            {{ simulacion.edad_objetivo }} años
+          </span>
         </div>
+
+        <div class="flex justify-between gap-4 text-sm">
+          <span class="muted-text">Fecha</span>
+
+          <span class="font-medium">
+            {{ simulacion.fecha_simulacion.strftime("%d/%m/%Y") }}
+          </span>
+        </div>
+
       </div>
 
-      <button class="auth-link mt-6 text-sm">
-        Abrir simulación
-      </button>
-    </article>
+      <div class="mt-6 flex items-center justify-between border-t border-[var(--color-border)] pt-4">
 
-    <article class="card card-padding border-dashed border-[var(--color-border)]">
-      <div class="flex h-full min-h-72 flex-col items-center justify-center text-center">
-        <h3 class="text-xl font-semibold">Guardar nuevo escenario</h3>
-        <p class="mt-3 max-w-sm muted-text">
-          Cuando calcules una simulación, vas a poder guardarla para compararla o modificarla más adelante.
-        </p>
+        <a href="{{ url_for('editar_independencia', id=simulacion.id_simulacion) }}" class="auth-link text-sm">
+          Ver • Editar
+        </a>
 
-        <button class="btn-primary mt-6">
-          Guardar simulación actual
-        </button>
+        <form action="{{ url_for('eliminar_independencia', id=simulacion.id_simulacion) }}" method="POST">
+
+          <button type="button" class="text-sm text-red-400 transition hover:text-red-300" onclick="openConfirmModal(
+                this.closest('form'),
+                'Eliminar simulación',
+                '¿Seguro que querés eliminar esta simulación? Esta acción no se puede deshacer.',
+                'Eliminar'
+              )">
+            Eliminar
+          </button>
+
+        </form>
+
       </div>
+
     </article>
+
+    {% endfor %}
 
   </div>
 
+  {% else %}
+
+  <article class="card card-padding border-dashed border-[var(--color-border)]">
+    <div class="flex min-h-52 flex-col items-center justify-center text-center">
+      <h3 class="text-xl font-semibold">Todavía no guardaste simulaciones</h3>
+
+      <p class="mt-3 max-w-sm muted-text">
+        Calculá un escenario y guardalo para verlo listado en esta sección.
+      </p>
+    </div>
+  </article>
+
+  {% endif %}
+
 </section>
+
 {% endblock %}

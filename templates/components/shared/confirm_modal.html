@@ -27,7 +27,7 @@
         id="confirm_modal_accept"
         class="rounded-2xl bg-[var(--color-danger)] px-5 py-3 text-sm font-semibold text-white transition hover:bg-red-500"
       >
-        Eliminar
+        Confirmar
       </button>
     </div>
   </div>
@@ -42,11 +42,17 @@
   const confirmModalCancel = document.getElementById("confirm_modal_cancel");
   const confirmModalAccept = document.getElementById("confirm_modal_accept");
 
-  function openConfirmModal(form, title, message) {
+  function openConfirmModal(
+    form,
+    title,
+    message,
+    confirmText = "Confirmar"
+  ) {
     formToSubmit = form;
 
     confirmModalTitle.textContent = title;
     confirmModalMessage.textContent = message;
+    confirmModalAccept.textContent = confirmText;
 
     confirmModal.classList.remove("hidden");
     confirmModal.classList.add("flex");
@@ -57,6 +63,8 @@
 
     confirmModal.classList.add("hidden");
     confirmModal.classList.remove("flex");
+
+    confirmModalAccept.textContent = "Confirmar";
   }
 
   confirmModalCancel.addEventListener("click", closeConfirmModal);

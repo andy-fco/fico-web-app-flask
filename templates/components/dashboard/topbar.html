@@ -1,29 +1,37 @@
 <header class="h-16 border-b border-[var(--color-border)] bg-[var(--color-bg-primary)] flex items-center justify-between px-6">
 
     <a href="{{ url_for('dashboard') }}" class="flex items-center gap-3">
+
         <div class="w-9 h-9 rounded-2xl bg-[var(--color-brand-primary)] flex items-center justify-center text-black font-bold">
             F
         </div>
 
-        <span class="font-semibold tracking-tight">
-            FiCo
-        </span>
+        <div>
+            <div class="font-semibold tracking-tight">
+                FiCo
+            </div>
+
+            <div class="text-xs text-[var(--color-text-muted)]">
+                Finanzas Inteligentes
+            </div>
+        </div>
+
     </a>
 
-    <div class="flex items-center gap-4">
+    <form action="{{ url_for('logout') }}"
+          method="POST">
 
-        <button class="nav-link text-sm">
-            Perfil
-        </button>
-
-        <button class="nav-link text-sm">
-            Configuración
-        </button>
-
-        <a href="{{ url_for('login') }}" class="btn-secondary px-4 py-2 text-sm rounded-xl">
+        <button type="button"
+                class="inline-flex items-center justify-center rounded-xl px-4 py-2 text-sm font-medium text-red-400 border border-red-500/20 transition hover:bg-red-500/10 hover:text-red-300"
+                onclick="openConfirmModal(
+                    this.closest('form'),
+                    'Cerrar sesión',
+                    '¿Seguro que querés cerrar sesión?',
+                    'Cerrar sesión'
+                )">
             Cerrar sesión
-        </a>
+        </button>
 
-    </div>
+    </form>
 
 </header>
