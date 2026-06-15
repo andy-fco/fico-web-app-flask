@@ -4,13 +4,11 @@
 FiCo | Home
 {% endblock %}
 
-
 {% block content %}
 <section class="space-y-8">
 
   <header>
-    
-    <h1 class="mt-2 text-3xl font-semibold">Hola, Andrés</h1>
+    <h1 class="mt-2 text-3xl font-semibold">Hola, {{ usuario.nombre }}</h1>
     <p class="mt-2 max-w-2xl muted-text">
       Tu resumen general.
     </p>
@@ -20,26 +18,32 @@ FiCo | Home
 
     <article class="card card-padding">
       <p class="text-sm muted-text">Saldo estimado</p>
-      <h2 class="mt-3 text-2xl font-semibold">$1.250.000</h2>
-      <p class="mt-2 text-sm text-emerald-400">+8.4% este mes</p>
+      <h2 class="mt-3 text-2xl font-semibold">${{ "{:,.0f}".format(saldo_total).replace(",", ".") }}</h2>
+      <p class="mt-2 text-sm text-emerald-400">Acumulado total</p>
     </article>
 
     <article class="card card-padding">
       <p class="text-sm muted-text">Ingresos</p>
-      <h2 class="mt-3 text-2xl font-semibold">$820.000</h2>
+      <h2 class="mt-3 text-2xl font-semibold">${{ "{:,.0f}".format(ingresos_mes).replace(",", ".") }}</h2>
       <p class="mt-2 text-sm text-[var(--color-text-muted)]">Últimos 30 días</p>
     </article>
 
     <article class="card card-padding">
       <p class="text-sm muted-text">Gastos</p>
-      <h2 class="mt-3 text-2xl font-semibold">$470.000</h2>
+      <h2 class="mt-3 text-2xl font-semibold">${{ "{:,.0f}".format(egresos_mes).replace(",", ".") }}</h2>
       <p class="mt-2 text-sm text-[var(--color-text-muted)]">Últimos 30 días</p>
     </article>
 
     <article class="card card-padding">
       <p class="text-sm muted-text">Ahorro mensual</p>
-      <h2 class="mt-3 text-2xl font-semibold">$350.000</h2>
-      <p class="mt-2 text-sm text-emerald-400">42% de tus ingresos</p>
+      <h2 class="mt-3 text-2xl font-semibold">${{ "{:,.0f}".format(ahorro_mes).replace(",", ".") }}</h2>
+      <p class="mt-2 text-sm text-emerald-400">
+        {% if ingresos_mes > 0 %}
+          {{ "{:.0f}".format((ahorro_mes / ingresos_mes) * 100) }}% de tus ingresos
+        {% else %}
+          Sin ingresos este mes
+        {% endif %}
+      </p>
     </article>
 
   </div>
@@ -52,38 +56,29 @@ FiCo | Home
           <h2 class="text-xl font-semibold">Actividad reciente</h2>
           <p class="mt-1 text-sm muted-text">Tus últimos movimientos cargados.</p>
         </div>
-
         <a href="{{ url_for('movimientos') }}" class="auth-link text-sm">
           Ver todos
         </a>
       </div>
 
       <div class="mt-6 divide-y divide-[var(--color-border)]">
-
+        {% for t in ultimas_transacciones %}
         <div class="flex items-center justify-between py-4">
           <div>
-            <p class="font-medium">Supermercado</p>
-            <p class="text-sm text-[var(--color-text-muted)]">Gasto · Hoy</p>
+            <p class="font-medium">{{ t.descripcion if t.descripcion else t.categoria }}</p>
+            <p class="text-sm text-[var(--color-text-muted)]">
+              {{ "Ingreso" if t.tipo == "ingreso" else "Gasto" }} · {{ t.fecha.strftime('%d/%m/%Y') }}
+            </p>
           </div>
-          <p class="font-medium text-red-400">- $42.500</p>
+          <p class="font-medium {% if t.tipo == 'ingreso' %}text-emerald-400{% else %}text-red-400{% endif %}">
+            {{ "+" if t.tipo == "ingreso" else "-" }} {{ t.moneda }} {{ "{:,.0f}".format(t.monto).replace(",", ".") }}
+          </p>
         </div>
-
-        <div class="flex items-center justify-between py-4">
-          <div>
-            <p class="font-medium">Sueldo</p>
-            <p class="text-sm text-[var(--color-text-muted)]">Ingreso · Ayer</p>
-          </div>
-          <p class="font-medium text-emerald-400">+ $820.000</p>
+        {% else %}
+        <div class="py-4 text-sm muted-text">
+          Todavía no registraste movimientos.
         </div>
-
-        <div class="flex items-center justify-between py-4">
-          <div>
-            <p class="font-medium">Transporte</p>
-            <p class="text-sm text-[var(--color-text-muted)]">Gasto · 18 mayo</p>
-          </div>
-          <p class="font-medium text-red-400">- $18.000</p>
-        </div>
-
+        {% endfor %}
       </div>
     </section>
 
@@ -93,21 +88,40 @@ FiCo | Home
       </p>
 
       <h2 class="mt-3 text-2xl font-semibold">
-        Vas bien encaminado
+        {% if ahorro_mes > 0 %}
+          Vas bien encaminado
+        {% elif ahorro_mes == 0 %}
+          En equilibrio
+        {% else %}
+          Revisá tus gastos
+        {% endif %}
       </h2>
 
       <p class="mt-3 text-sm leading-6 text-zinc-300">
-        Tu nivel de ahorro es saludable. Si mantenés este ritmo, podrías acelerar tus objetivos de independencia financiera.
+        {% if ahorro_mes > 0 %}
+          Tu nivel de ahorro es saludable. Si mantenés este ritmo, podrías acelerar tus objetivos de independencia financiera.
+        {% elif ahorro_mes == 0 %}
+          Tus ingresos y gastos están equilibrados este mes.
+        {% else %}
+          Tus gastos superan tus ingresos este mes. Revisá tus movimientos.
+        {% endif %}
       </p>
 
       <div class="mt-6">
         <div class="mb-2 flex justify-between text-sm">
           <span class="muted-text">Progreso mensual</span>
-          <span class="text-[var(--color-brand-primary)]">68%</span>
+          <span class="text-[var(--color-brand-primary)]">
+            {% if ingresos_mes > 0 %}
+              {{ "{:.0f}".format((ahorro_mes / ingresos_mes) * 100) }}%
+            {% else %}
+              0%
+            {% endif %}
+          </span>
         </div>
-
         <div class="h-3 overflow-hidden rounded-full bg-[var(--color-bg-tertiary)]">
-          <div class="h-full w-[68%] rounded-full bg-[var(--color-brand-primary)]"></div>
+          <div class="h-full rounded-full bg-[var(--color-brand-primary)]"
+               style="width: {% if ingresos_mes > 0 %}{{ "{:.0f}".format((ahorro_mes / ingresos_mes) * 100) }}{% else %}0{% endif %}%">
+          </div>
         </div>
       </div>
 
