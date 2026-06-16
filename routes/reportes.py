@@ -1,5 +1,6 @@
 from flask import request, render_template, jsonify
 from models.transaccion import Transaccion
+from models.presupuesto import Presupuesto
 from routes import login_required, get_usuario_actual
 from datetime import date
 from collections import defaultdict
@@ -41,6 +42,7 @@ def register_routes(app):
                 por_cat[t.categoria] += float(t.monto)
 
         total_egresos = sum(por_cat.values()) or 1
+        
         categorias_data = [
             {
                 "nombre": nombre,
@@ -49,6 +51,41 @@ def register_routes(app):
             }
             for nombre, monto in sorted(por_cat.items(), key=lambda x: x[1], reverse=True)
         ]
+        
+        COLORES_GRAFICO = [
+            "#2cd195",  
+            "#38bdf8", 
+            "#f59e0b", 
+            "#ef4444",  
+            "#a78bfa",  
+            "#22c55e",  
+            "#f97316",  
+            "#e879f9",  
+        ]
+
+        for i, cat in enumerate(categorias_data):
+            cat["color"] = COLORES_GRAFICO[i % len(COLORES_GRAFICO)]
+
+        segmentos_gradiente = []
+        angulo_inicio = 0
+
+        for i, cat in enumerate(categorias_data):
+            if i == len(categorias_data) - 1:
+                angulo_fin = 360
+            else:
+                angulo_fin = angulo_inicio + (float(cat["pct"]) * 3.6)
+
+            segmentos_gradiente.append(
+                f"{cat['color']} {angulo_inicio:.2f}deg {angulo_fin:.2f}deg"
+            )
+
+            angulo_inicio = angulo_fin
+
+        grafico_gastos_gradient = (
+            f"conic-gradient({', '.join(segmentos_gradiente)})"
+            if segmentos_gradiente
+            else "conic-gradient(var(--color-bg-tertiary) 0deg 360deg)"
+        )
 
         mayor_categoria = categorias_data[0] if categorias_data else None
         total_transacciones = len(transacciones)
@@ -90,6 +127,46 @@ def register_routes(app):
 
         for e in evolucion:
             e["pct_barra"] = round((e["ahorro"] / max_ahorro) * 100, 1) if max_ahorro > 0 else 0
+            
+        presupuestos = Presupuesto.query.filter_by(
+            id_usuario=usuario.id_usuario,
+            activo=True
+        ).all()
+
+        presupuestos_data = []
+
+        for p in presupuestos:
+            gasto_actual = p.get_gasto_actual()
+            porcentaje = p.get_porcentaje_usado()
+            limite = float(p.limite_gasto)
+            restante = limite - gasto_actual
+
+            if porcentaje >= 100:
+                estado = "Excedido"
+                estado_clase = "text-red-400"
+                barra_clase = "bg-red-400"
+            elif porcentaje >= 80:
+                estado = "Cerca del límite"
+                estado_clase = "text-amber-400"
+                barra_clase = "bg-amber-400"
+            else:
+                estado = "En orden"
+                estado_clase = "text-emerald-400"
+                barra_clase = "bg-[var(--color-brand-primary)]"
+
+            presupuestos_data.append({
+                "categoria": p.categoria,
+                "moneda": p.moneda,
+                "periodo": p.periodo,
+                "limite": limite,
+                "gasto_actual": gasto_actual,
+                "restante": restante,
+                "porcentaje": min(porcentaje, 100),
+                "porcentaje_real": porcentaje,
+                "estado": estado,
+                "estado_clase": estado_clase,
+                "barra_clase": barra_clase,
+            })
 
         return render_template(
             "dashboard/reportes.html",
@@ -101,11 +178,13 @@ def register_routes(app):
             pct_egresos=pct_egresos,
             promedio_diario=promedio_diario,
             categorias_data=categorias_data,
+            grafico_gastos_gradient=grafico_gastos_gradient,
             mayor_categoria=mayor_categoria,
             total_transacciones=total_transacciones,
             total_ing=total_ing,
             total_eg=total_eg,
             evolucion=evolucion,
+            presupuestos_data=presupuestos_data
         )
 
     @app.route("/api/reportes/evolucion")

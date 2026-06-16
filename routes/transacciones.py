@@ -1,6 +1,7 @@
 from flask import request, redirect, url_for, render_template, flash, jsonify
 from extensions import db
 from models.transaccion import Transaccion
+from models.presupuesto import Presupuesto
 from routes import login_required, get_usuario_actual
 from datetime import date
 from services.app_config import AppConfig
@@ -17,6 +18,10 @@ def register_routes(app):
         transacciones = Transaccion.query.filter_by(
             id_usuario=usuario.id_usuario
         ).order_by(Transaccion.fecha.desc()).all()
+        
+        presupuestos = Presupuesto.query.filter_by(
+            id_usuario=usuario.id_usuario
+        ).order_by(Presupuesto.id_presupuesto.desc()).all()
 
         categorias_usuario = [
             c[0] for c in db.session.query(Transaccion.categoria)
@@ -30,7 +35,8 @@ def register_routes(app):
         return render_template(
             "dashboard/movimientos.html",
             transacciones=transacciones,
-            categorias=categorias
+            categorias=categorias,
+            presupuestos=presupuestos
         )
 
     @app.route("/dashboard/movimientos/nueva", methods=["POST"])
@@ -97,6 +103,10 @@ def register_routes(app):
             id_transaccion=id,
             id_usuario=usuario.id_usuario
         ).first_or_404()
+        
+        presupuestos = Presupuesto.query.filter_by(
+            id_usuario=usuario.id_usuario
+        ).order_by(Presupuesto.id_presupuesto.desc()).all()
 
         categorias_usuario = [
             c[0] for c in db.session.query(Transaccion.categoria)
@@ -161,7 +171,8 @@ def register_routes(app):
             "dashboard/movimientos.html",
             transaccion=transaccion,
             transacciones=transacciones,
-            categorias=categorias
+            categorias=categorias,
+            presupuestos=presupuestos
         )
 
     @app.route("/dashboard/movimientos/<int:id>/eliminar", methods=["POST"])

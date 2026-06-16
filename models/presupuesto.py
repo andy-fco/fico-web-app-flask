@@ -21,40 +21,23 @@ class Presupuesto(db.Model):
     def get_periodo_actual(self) -> tuple[date, date]:
         hoy = date.today()
 
-        if hoy < self.fecha_inicio:
-            return self.fecha_inicio, self.fecha_inicio
-
-        if self.fecha_fin is not None and hoy > self.fecha_fin:
-            hoy = self.fecha_fin
-
         if self.periodo == "semana":
-            dias_transcurridos = (hoy - self.fecha_inicio).days
-            semanas_transcurridas = dias_transcurridos // 7
-            inicio = self.fecha_inicio + timedelta(weeks=semanas_transcurridas)
+            inicio = hoy - timedelta(days=hoy.weekday())
             fin = inicio + timedelta(days=6)
 
         elif self.periodo == "mes":
-            meses_transcurridos = (
-                (hoy.year - self.fecha_inicio.year) * 12
-                + (hoy.month - self.fecha_inicio.month)
-            )
+            inicio = date(hoy.year, hoy.month, 1)
 
-            year = self.fecha_inicio.year + (self.fecha_inicio.month - 1 + meses_transcurridos) // 12
-            month = (self.fecha_inicio.month - 1 + meses_transcurridos) % 12 + 1
-
-            inicio = date(year, month, self.fecha_inicio.day)
-
-            if month == 12:
-                siguiente_mes = date(year + 1, 1, 1)
+            if hoy.month == 12:
+                siguiente_mes = date(hoy.year + 1, 1, 1)
             else:
-                siguiente_mes = date(year, month + 1, 1)
+                siguiente_mes = date(hoy.year, hoy.month + 1, 1)
 
             fin = siguiente_mes - timedelta(days=1)
 
         else:
-            años_transcurridos = hoy.year - self.fecha_inicio.year
-            inicio = date(self.fecha_inicio.year + años_transcurridos, self.fecha_inicio.month, self.fecha_inicio.day)
-            fin = date(inicio.year + 1, inicio.month, inicio.day) - timedelta(days=1)
+            inicio = date(hoy.year, 1, 1)
+            fin = date(hoy.year, 12, 31)
 
         if self.fecha_fin is not None and fin > self.fecha_fin:
             fin = self.fecha_fin
