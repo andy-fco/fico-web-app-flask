@@ -222,3 +222,4 @@ venv/
 
 # Node dependencies
 node_modules/
+.env

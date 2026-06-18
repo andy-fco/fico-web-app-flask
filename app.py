@@ -1,10 +1,14 @@
 from flask import Flask, render_template, url_for
 from extensions import db
 from datetime import timedelta
+from dotenv import load_dotenv
 import os
 
 app = Flask(__name__)
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///fico.db"
+app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get(
+    "DATABASE_URL",
+    "sqlite:///fico.db"
+)
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.config["SECRET_KEY"] = os.environ.get("SECRET_KEY", "dev-secret-key-cambiar-en-produccion")
 app.config["PERMANENT_SESSION_LIFETIME"] = timedelta(days=7)
