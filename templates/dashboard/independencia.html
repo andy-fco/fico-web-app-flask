@@ -140,11 +140,11 @@ FiCo | Independencia
           <input type="hidden" name="gastos_mensuales" value="{{ resultado.gastos_mensuales }}">
           <input type="hidden" name="ahorro_disponible" value="{{ resultado.ahorro_disponible }}">
           <input type="hidden" name="tasa_rendimiento" value="{{ resultado.tasa_rendimiento }}">
-          <input type="hidden" name="tasa_retiro" value="{{ resultado.tasa_retiro }}">
+          <input type="hidden" name="estrategia_retiro" value="{{ valores.estrategia_retiro | default('estandar') }}">
           <input type="hidden" name="edad_actual" value="{{ resultado.edad_actual }}">
           <input type="hidden" name="edad_objetivo" value="{{ resultado.edad_objetivo }}">
           <input type="hidden" name="capital_inicial" value="{{ resultado.capital_inicial }}">
-          <input type="hidden" name="capital_objetivo" value="{{ resultado.capital_objetivo }}">
+          <input type="hidden" name="capital_objetivo" value="">
           <input type="hidden" name="moneda" value="{{ resultado.moneda }}">
 
           <button type="submit" class="btn-primary w-full">

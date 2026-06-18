@@ -2,6 +2,7 @@ from flask import request, render_template, flash, redirect, url_for
 from extensions import db
 from models.simulacion_if import SimulacionIF
 from controllers import login_required, get_usuario_actual
+from services.strategies.retiro_strategy import RetiroStrategyFactory
 
 
 def obtener_datos_simulacion():
@@ -9,13 +10,31 @@ def obtener_datos_simulacion():
         "gastos_mensuales": request.form.get("gastos_mensuales", type=float, default=0),
         "ahorro_disponible": request.form.get("ahorro_disponible", type=float, default=0),
         "tasa_rendimiento": request.form.get("tasa_rendimiento", type=float, default=0),
-        "tasa_retiro": request.form.get("tasa_retiro", type=float, default=4.0),
+        "estrategia_retiro": request.form.get("estrategia_retiro", default="estandar"),
         "edad_actual": request.form.get("edad_actual", type=int, default=25),
         "edad_objetivo": request.form.get("edad_objetivo", type=int, default=60),
         "capital_inicial": request.form.get("capital_inicial", type=float, default=0),
         "capital_objetivo": request.form.get("capital_objetivo", type=float) or None,
         "moneda": request.form.get("moneda", default="ARS"),
     }
+
+
+def aplicar_strategy_retiro(datos):
+    strategy = RetiroStrategyFactory.create(datos["estrategia_retiro"])
+    datos["tasa_retiro"] = strategy.obtener_tasa()
+    return datos
+
+
+def obtener_estrategia_desde_tasa(tasa_retiro):
+    tasa = float(tasa_retiro)
+
+    if tasa == 3.0:
+        return "conservadora"
+
+    if tasa == 5.0:
+        return "agresiva"
+
+    return "estandar"
 
 
 def validar_datos_simulacion(datos):
@@ -68,6 +87,7 @@ def register_routes(app):
     @app.route("/simulador/calcular", methods=["POST"])
     def calcular_simulador_publico():
         datos = obtener_datos_simulacion()
+        datos = aplicar_strategy_retiro(datos)
         errores = validar_datos_simulacion(datos)
 
         if errores:
@@ -92,7 +112,6 @@ def register_routes(app):
             contexto="publico",
         )
 
-
     @app.route("/dashboard/independencia")
     @login_required
     def independencia():
@@ -107,12 +126,12 @@ def register_routes(app):
             contexto="dashboard",
         )
 
-
     @app.route("/dashboard/independencia/calcular", methods=["POST"])
     @login_required
     def calcular_independencia():
         usuario = get_usuario_actual()
         datos = obtener_datos_simulacion()
+        datos = aplicar_strategy_retiro(datos)
         errores = validar_datos_simulacion(datos)
 
         if errores:
@@ -141,12 +160,12 @@ def register_routes(app):
             contexto="dashboard",
         )
 
-
     @app.route("/dashboard/independencia/guardar", methods=["POST"])
     @login_required
     def guardar_independencia():
         usuario = get_usuario_actual()
         datos = obtener_datos_simulacion()
+        datos = aplicar_strategy_retiro(datos)
         errores = validar_datos_simulacion(datos)
 
         if errores:
@@ -163,7 +182,7 @@ def register_routes(app):
         flash("Simulación guardada correctamente.", "success")
 
         return redirect(url_for("independencia"))
-    
+
     @app.route("/dashboard/independencia/<int:id>/editar")
     @login_required
     def editar_independencia(id):
@@ -179,10 +198,11 @@ def register_routes(app):
             "ahorro_disponible": float(simulacion.ahorro_disponible),
             "tasa_rendimiento": simulacion.tasa_rendimiento,
             "tasa_retiro": simulacion.tasa_retiro,
+            "estrategia_retiro": obtener_estrategia_desde_tasa(simulacion.tasa_retiro),
             "edad_actual": simulacion.edad_actual,
             "edad_objetivo": simulacion.edad_objetivo,
             "capital_inicial": float(simulacion.capital_inicial),
-            "capital_objetivo": float(simulacion.capital_objetivo) if simulacion.capital_objetivo else None,
+            "capital_objetivo": None,
             "moneda": simulacion.moneda,
         }
 
@@ -194,7 +214,7 @@ def register_routes(app):
             form_action=url_for("calcular_independencia"),
             contexto="dashboard",
         )
-        
+
     @app.route("/dashboard/independencia/<int:id>/eliminar", methods=["POST"])
     @login_required
     def eliminar_independencia(id):

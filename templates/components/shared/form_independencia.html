@@ -1,6 +1,4 @@
-<form class="card card-padding space-y-8"
-      method="POST"
-      action="{{ form_action }}">
+<form class="card card-padding space-y-8" method="POST" action="{{ form_action }}">
 
   <div>
     <h2 class="text-2xl font-bold mb-2">
@@ -19,13 +17,8 @@
         Gasto mensual estimado
       </label>
 
-      <input type="number"
-             name="gastos_mensuales"
-             min="0"
-             step="1000"
-             value="{{ valores.gastos_mensuales | default(450000) }}"
-             placeholder="Ej: 450000"
-             class="input">
+      <input type="number" name="gastos_mensuales" min="0" step="1000"
+        value="{{ valores.gastos_mensuales | default(450000) }}" placeholder="Ej: 450000" class="input">
     </div>
 
     <div>
@@ -33,13 +26,8 @@
         Capital inicial disponible
       </label>
 
-      <input type="number"
-             name="capital_inicial"
-             min="0"
-             step="1000"
-             value="{{ valores.capital_inicial | default(1000000) }}"
-             placeholder="Ej: 1000000"
-             class="input">
+      <input type="number" name="capital_inicial" min="0" step="1000"
+        value="{{ valores.capital_inicial | default(1000000) }}" placeholder="Ej: 1000000" class="input">
     </div>
 
     <div>
@@ -48,10 +36,10 @@
       </label>
 
       <select name="moneda" class="input select-input">
-        <option value="ARS" {% if valores.moneda | default("ARS") == "ARS" %}selected{% endif %}>
+        <option value="ARS" {% if valores.moneda | default("ARS")=="ARS" %}selected{% endif %}>
           Pesos argentinos
         </option>
-        <option value="USD" {% if valores.moneda | default("ARS") == "USD" %}selected{% endif %}>
+        <option value="USD" {% if valores.moneda | default("ARS")=="USD" %}selected{% endif %}>
           Dólares
         </option>
       </select>
@@ -63,19 +51,12 @@
           Ahorro / inversión mensual
         </label>
 
-        <span id="monthly-investment-output"
-              class="text-sm text-[var(--color-brand-primary)] font-semibold"></span>
+        <span id="monthly-investment-output" class="text-sm text-[var(--color-brand-primary)] font-semibold"></span>
       </div>
 
-      <input type="range"
-             name="ahorro_disponible"
-             min="0"
-             max="500000"
-             step="5000"
-             value="{{ valores.ahorro_disponible | default(75000) }}"
-             data-target="monthly-investment-output"
-             data-format="money"
-             class="w-full accent-emerald-400 cursor-pointer">
+      <input type="range" name="ahorro_disponible" min="0" max="500000" step="5000"
+        value="{{ valores.ahorro_disponible | default(75000) }}" data-target="monthly-investment-output"
+        data-format="money" class="w-full accent-emerald-400 cursor-pointer">
 
       <div class="flex justify-between text-xs text-[var(--color-text-muted)] mt-2">
         <span>$0</span>
@@ -89,19 +70,12 @@
           Rendimiento anual estimado
         </label>
 
-        <span id="annual-return-output"
-              class="text-sm text-[var(--color-brand-primary)] font-semibold"></span>
+        <span id="annual-return-output" class="text-sm text-[var(--color-brand-primary)] font-semibold"></span>
       </div>
 
-      <input type="range"
-             name="tasa_rendimiento"
-             min="0"
-             max="15"
-             step="0.5"
-             value="{{ valores.tasa_rendimiento | default(6) }}"
-             data-target="annual-return-output"
-             data-format="percent"
-             class="w-full accent-emerald-400 cursor-pointer">
+      <input type="range" name="tasa_rendimiento" min="0" max="15" step="0.5"
+        value="{{ valores.tasa_rendimiento | default(6) }}" data-target="annual-return-output" data-format="percent"
+        class="w-full accent-emerald-400 cursor-pointer">
 
       <div class="flex justify-between text-xs text-[var(--color-text-muted)] mt-2">
         <span>0%</span>
@@ -117,18 +91,11 @@
             Edad actual
           </label>
 
-          <span id="current-age-output"
-                class="text-sm text-[var(--color-brand-primary)] font-semibold"></span>
+          <span id="current-age-output" class="text-sm text-[var(--color-brand-primary)] font-semibold"></span>
         </div>
 
-        <input type="range"
-               name="edad_actual"
-               min="16"
-               max="70"
-               value="{{ valores.edad_actual | default(22) }}"
-               data-target="current-age-output"
-               data-format="number"
-               class="w-full accent-emerald-400 cursor-pointer">
+        <input type="range" name="edad_actual" min="16" max="70" value="{{ valores.edad_actual | default(22) }}"
+          data-target="current-age-output" data-format="number" class="w-full accent-emerald-400 cursor-pointer">
       </div>
 
       <div>
@@ -137,18 +104,11 @@
             Edad objetivo
           </label>
 
-          <span id="target-age-output"
-                class="text-sm text-[var(--color-brand-primary)] font-semibold"></span>
+          <span id="target-age-output" class="text-sm text-[var(--color-brand-primary)] font-semibold"></span>
         </div>
 
-        <input type="range"
-               name="edad_objetivo"
-               min="18"
-               max="80"
-               value="{{ valores.edad_objetivo | default(45) }}"
-               data-target="target-age-output"
-               data-format="number"
-               class="w-full accent-emerald-400 cursor-pointer">
+        <input type="range" name="edad_objetivo" min="18" max="80" value="{{ valores.edad_objetivo | default(45) }}"
+          data-target="target-age-output" data-format="number" class="w-full accent-emerald-400 cursor-pointer">
       </div>
 
     </div>
@@ -161,27 +121,30 @@
       <div class="mt-4 space-y-6">
 
         <div>
-          <div class="flex items-center justify-between mb-2">
-            <label class="label mb-0">
-              Tasa de retiro segura
-            </label>
+          <label class="label">
+            Estrategia de retiro
+          </label>
 
-            <span id="safe-withdrawal-rate-output"
-                  class="text-sm text-[var(--color-brand-primary)] font-semibold"></span>
-          </div>
+          <select name="estrategia_retiro" class="input select-input">
+            <option value="conservadora" {% if valores.estrategia_retiro | default("estandar")=="conservadora"
+              %}selected{% endif %}>
+              Conservadora — 3% anual
+            </option>
 
-          <input type="range"
-                 name="tasa_retiro"
-                 min="2"
-                 max="6"
-                 step="0.25"
-                 value="{{ valores.tasa_retiro | default(4) }}"
-                 data-target="safe-withdrawal-rate-output"
-                 data-format="percent"
-                 class="w-full accent-emerald-400 cursor-pointer">
+            <option value="estandar" {% if valores.estrategia_retiro | default("estandar")=="estandar" %}selected{%
+              endif %}>
+              Estándar — 4% anual
+            </option>
+
+            <option value="agresiva" {% if valores.estrategia_retiro | default("estandar")=="agresiva" %}selected{%
+              endif %}>
+              Agresiva — 5% anual
+            </option>
+          </select>
 
           <p class="text-xs text-[var(--color-text-muted)] mt-3 leading-relaxed">
-            Representa el porcentaje anual que estimás retirar de tu capital para cubrir gastos.
+            Define el criterio usado para calcular el capital objetivo: conservador requiere más capital, estándar usa
+            la regla del 4%, y agresivo requiere menos capital.
           </p>
         </div>
 
@@ -190,13 +153,9 @@
             Capital objetivo manual
           </label>
 
-          <input type="number"
-                 name="capital_objetivo"
-                 min="0"
-                 step="1000"
-                 value="{{ valores.capital_objetivo | default('', true) }}"
-                 placeholder="Opcional. Si lo dejás vacío, FiCo lo calcula."
-                 class="input">
+          <input type="number" name="capital_objetivo" min="0" step="1000"
+            value="{{ valores.capital_objetivo | default('', true) }}"
+            placeholder="Opcional. Si lo dejás vacío, FiCo lo calcula." class="input">
 
           <p class="text-xs text-[var(--color-text-muted)] mt-3 leading-relaxed">
             Si no ingresás un capital objetivo, se calcula automáticamente con la regla de retiro.
