@@ -2,7 +2,7 @@ from flask import request, redirect, url_for, render_template, flash, jsonify
 from extensions import db
 from models.transaccion import Transaccion
 from models.presupuesto import Presupuesto
-from routes import login_required, get_usuario_actual
+from controllers import login_required, get_usuario_actual
 from datetime import date
 from services.app_config import AppConfig
 

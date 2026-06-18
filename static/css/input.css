@@ -243,3 +243,12 @@
   }
 
 }
+
+.chat-scroll::-webkit-scrollbar {
+    display: none;
+}
+
+.chat-scroll {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}

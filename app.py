@@ -4,6 +4,8 @@ from datetime import timedelta
 from dotenv import load_dotenv
 import os
 
+load_dotenv()
+
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get(
     "DATABASE_URL",
@@ -16,13 +18,14 @@ app.config["PERMANENT_SESSION_LIFETIME"] = timedelta(days=7)
 db.init_app(app)
 
 # importo rutas
-from routes.auth import register_routes as auth_routes
-from routes.dashboard import register_routes as dashboard_routes
-from routes.transacciones import register_routes as transacciones_routes
-from routes.presupuestos import register_routes as presupuestos_routes
-from routes.objetivos import register_routes as objetivos_routes
-from routes.reportes import register_routes as reportes_routes
-from routes.simulador import register_routes as simulador_routes
+from controllers.auth import register_routes as auth_routes
+from controllers.dashboard import register_routes as dashboard_routes
+from controllers.transacciones import register_routes as transacciones_routes
+from controllers.presupuestos import register_routes as presupuestos_routes
+from controllers.objetivos import register_routes as objetivos_routes
+from controllers.reportes import register_routes as reportes_routes
+from controllers.simulador import register_routes as simulador_routes
+from controllers.chatbot import register_routes as chatbot_routes
 
 auth_routes(app)
 dashboard_routes(app)
@@ -31,6 +34,7 @@ presupuestos_routes(app)
 objetivos_routes(app)
 reportes_routes(app)
 simulador_routes(app)
+chatbot_routes(app)
 
 # creo tablas
 with app.app_context():

@@ -1,6 +1,6 @@
 from flask import render_template
 from models.transaccion import Transaccion
-from routes import login_required, get_usuario_actual
+from controllers import login_required, get_usuario_actual
 from datetime import date
 
 

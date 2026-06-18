@@ -1,7 +1,7 @@
 from flask import request, render_template, flash, redirect, url_for
 from extensions import db
 from models.simulacion_if import SimulacionIF
-from routes import login_required, get_usuario_actual
+from controllers import login_required, get_usuario_actual
 
 
 def obtener_datos_simulacion():
