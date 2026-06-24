@@ -1,3 +1,5 @@
+#Implementación del patrón de diseño STRATEGY
+
 from abc import ABC, abstractmethod
 
 
